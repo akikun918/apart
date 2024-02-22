@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+</head>
+
+<body>
+
+
+	<th:block th:object="${all}">
+
+		<!-- <img th:each="image : *{getRoomList().get(0).roomImageList}"
+			th:src="@{/uploads/{name}(name=${image.name})}" alt="" width="100"
+			height="100" />
+ -->
+
+		<p th:each="image : *{getRoomList().get(0).roomImageList}" th:text="${image.name}">
+		<div class="list_li right_part">
+			<div class="list_li_inner">
+				<dl class="bd_information">
+					<dt>[[*{apart.name}]] [[*{getRoomList().get(0).number}]]号室</dt>
+
+					<dd class="bd_explanation">最寄り駅：[[*{apart.station1}]] 徒歩[[*{apart.far1}]]分
+						[[*{apart.station2}]] 徒歩[[*{apart.far2}]]分 [[*{apart.station3}]] 徒歩[[*{apart.far3}]]分</dd>
+					<dd class="bd_explanation">エリア：[[*{apart.address1}]]</dd>
+					<dd class="bd_explanation">材質：[[*{apart.material}]]</dd>
+					<dd th:if="*{apart.point != null}">[[*{apart.point}]]</dd>
+					<dd th:if="*{apart.other != null}">家賃：[[*{apart.other}]]</dd>
+					<!-- 			<p th:text="*{#numbers.formatInteger(price, 3, 'COMMA')}"></p> -->
+
+
+					<dd th:text="*{#numbers.formatInteger(getRoomList().get(0).price, 1)}"></dd>
+
+					<dd class="bd_explanation">家賃：[[*{getRoomList().get(0).price}]]</dd>
+					<dd th:if="*{getRoomList().get(0).deposit == 0}">敷金：無料</dd>
+					<dd th:unless="*{getRoomList().get(0).deposit == 0}">敷金：[[*{getRoomList().get(0).deposit}]]</dd>
+					<dd th:if="*{getRoomList().get(0).keyMoney == 0}">礼金：無料</dd>
+					<dd th:unless="*{getRoomList().get(0).keyMoney == 0}">礼金：[[*{getRoomList().get(0).keyMoney}]]</dd>
+					<dd class="bd_explanation">サイズ：[[*{getRoomList().get(0).size}]]畳</dd>
+					<dd th:if="*{getRoomList().get(0).sepToilet == 1}">バスルーム：セパレート</dd>
+					<dd th:if="*{getRoomList().get(0).sepToilet == 0}">バスルーム：ユニットバス</dd>
+					<dd class="bd_explanation">[[*{getRoomList().get(0).point}]]</dd>
+					<dd class="bd_explanation">[[*{getRoomList().get(0).other}]]</dd>
+				</dl>
+
+			</div>
+		</div>
+
+	</th:block>
+
+
+
+	<th:block th:object="${all}">
+		<h1>[[*{apart.name}]]</h1>
+		<a href="javascript:void(0);"
+			onclick="registClipSingle(this);return false;"><span>お気に入りに追加する</span><span>お気に入りに追加済み</span></a>
+		<table border="1">
+			<tr>
+				<th></th>
+				<td colspan="3">東京都中央区新川２</td>
+			</tr>
+			<tr>
+				<th>所在地</th>
+				<td colspan="3">東京都中央区新川２</td>
+			</tr>
+			<tr>
+				<th>駅徒歩</th>
+				<td colspan="3">
+					<div>[[*{apart.station1}]]
+						駅 徒歩[[*{apart.far1}]]分</div>
+					<div>
+						<th:block th:if="*{apart.station2 != null}">[[*{apart.station2}]]
+							駅 徒歩[[*{apart.far2}]]分 </th:block>
+					</div>
+					<div>
+						<th:block th:if="*{apart.station3 != null}">[[*{apart.station3}]]
+							駅 徒歩[[*{apart.far3}]]分 </th:block>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th>間取り</th>
+				<td>2LDK</td>
+				<!--											<th class="property_view_table-title">専有面積</th>
+-->
+				<th>広さ</th>
+				<td>
+					[[*{getRoomList().get(0).size}]]畳<sup>2</sup></td>
+			</tr>
+			<tr>
+				<th>築年数</th>
+				<td>築[[*{old}]]年</td>
+				<th>階</th>
+				<td>[[*{getRoomList().get(0).floor}]]階</td>
+			</tr>
+			<tr>
+				<th>向き</th>
+				<td>北西</td>
+				<th>建物種別</th>
+				<td>マンション</td>
+			</tr>
+		</table>
+		<ul>
+			<!--		<li><img src="/jj/jjcommon/img/tab_bkdt-detail_ov.gif" alt="部屋情報" width="150" height="29" /></li>
+	-->
+			<li><a href="/chintai/jnc_000087204540/kankyo/?bc=100362906825"><img
+						src="/jj/jjcommon/img/tab_bkdt-around.gif?20180307" alt="地図・周辺環境" width="150" height="29"
+						class="imgover" /></a></li>
+
+			<!--	<li><a id="js-kuchikomiLinkFrHeddar" href="javascript:void(0);"
+							onclick="kuchikomi_link_fr();return false;" class="mL10 dibz vat"><img
+								src="/jj/jjcommon/img/btn_bkdt-kuchikomi.gif" width="110" height="24" alt="エリアの口コミ"
+								class="imgover" /></a></li>-->
+		</ul>
+
+
+		<p>
+			<a th:href="@{/rent/inquiry(id=*{getRoomList().get(0).id})}">お問い合わせ</a>
+		</p>
+
+		<h2>
+			<span>部屋の特徴・設備</span>
+		</h2>
+
+		<ul class="inline_list">
+			<li>バストイレ別、バルコニー、エアコン、ガスコンロ対応、クロゼット、フローリング、TVインターホン、浴室乾燥機、オートロック、室内洗濯置、シューズボックス、システムキッチン、追焚機能浴室、角住戸、温水洗浄便座、脱衣所、エレベーター、洗面所独立、2口コンロ、駐輪場、宅配ボックス、CATV、2面採光、BS・CS、対面式キッチン、防犯カメラ、オートバス、保証人不要、単身者相談、敷金1ヶ月、二人入居相談、全居室フローリング、2沿線利用可、仲手0.55ヶ月、エアコン2台、CS、ネット使用料不要、床暖房、食器洗乾燥機、ダブルロックキー、保証金不要、浴室に窓、24時間換気システム、クロゼット2ヶ所、人感照明センサー、耐震構造、2駅利用可、24時間ゴミ出し可、敷地内ごみ置き場、都市ガス、洗面所にドア、天井高シューズクロゼット、玄関収納、BS、リノベーション、保証会社利用可、初期費用カード決済可
+			</li>
+		</ul>
+
+		<h2>
+			<span>物件概要</span>
+		</h2>
+		<div class="container">
+			<div class="row">
+				<div class=" col-12 col-xl-10  m-auto">
+					<table cellspacing="0" border="1">
+						<tr>
+							<th scope="cols">間取り詳細</th>
+							<td>洋5 洋5 LDK8</td>
+							<th scope="cols">構造</th>
+							<td>[[*{apart.material}]]</td>
+						</tr>
+						<tr>
+							<th scope="cols">階建</th>
+							<td>2階/7階建</td>
+							<th scope="cols">築年月</th>
+							<td>[[*{apart.builtAt}]]</td>
+						</tr>
+						<tr>
+							<th scope="cols">損保</th>
+							<td>1.8万円2年</td>
+							<th scope="cols">駐車場</th>
+							<td>-</td>
+						</tr>
+						<tr>
+							<th scope="cols">入居</th>
+							<td>即</td>
+							<th scope="cols">取引態様</th>
+							<td>仲介</td>
+						</tr>
+						<tr>
+							<th scope="cols">条件</th>
+							<td>単身者可/二人入居可</td>
+							<th scope="cols">取り扱い店舗<br />物件コード
+							</th>
+							<td>P15505</td>
+						</tr>
+						<tr>
+							<th scope="cols">SUUMO<br />物件コード
+							</th>
+							<td>[[*{getRoomList().get(0).id}]]</td>
+							<th scope="cols">総戸数</th>
+							<td>29戸</td>
+
+						</tr>
+						<tr>
+							<th scope="cols">情報更新日</th>
+							<td>2024/01/27</td>
+							<th scope="cols">次回更新日</th>
+							<td>次回更新日は情報更新日より８日以内</td>
+						</tr>
+						<tr>
+							<th scope="cols">仲介手数料</th>
+							<td colspan="3">
+								<ul>
+									<li>[[*{owner.customerBrokerageFee}]]ヶ月</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="cols">保証会社</th>
+							<td colspan="3">
+								<ul>
+									<li>保証会社利用必 初回保証料：総賃料の50％から ※詳細はお問合せください。</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="cols">ほか初期費用</th>
+							<td colspan="3">
+								<ul>
+									<li>合計2.2万円（内訳：鍵交換費用：22000円）</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="cols">備考</th>
+							<td colspan="3">
+								<ul class="inline_list">
+									<li>【分譲仕様のハイグレード物件！先行申込受付中☆】
+										★法人様契約可能！社宅担当者がサポートいたします。★ネット非公開の物件からも類似物件をたくさんご提案！ベストなお部屋をご紹いたします♪https://www.primohome.jp/
+									</li>
+								</ul>
+							</td>
+						</tr>
+					</table>
+				</div><!-- /.col -->
+			</div><!-- /.row -->
+		</div>
+	</th:block>
+</body>
+
+</html>

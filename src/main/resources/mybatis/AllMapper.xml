@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.mapper.AllMapper">
+
+	<sql id="noPager">
+		<!-- domainのApart.java -->
+		aparts.id, aparts.id AS apart_id, aparts.name,
+		aparts.station1,
+		aparts.far1,
+		aparts.station2,
+		aparts.far2,
+		aparts.station3, aparts.far3,
+		aparts.address1,
+		aparts.address2,
+		aparts.material,
+		aparts.point,
+		aparts.other,
+		aparts.owner_id,
+		aparts.built_at,
+		aparts.img_name,
+		<!-- ↓domainのAll.javaのフィールド -->
+		TIMESTAMPDIFF(YEAR,
+		aparts.built_at, CURDATE()) AS old,
+		<!-- ↓domainのRoom.javaのフィールド -->
+		rooms.id
+		AS
+		room_id ,
+		rooms.apart_id,
+		rooms.number,
+		rooms.active,
+		rooms.price,
+		rooms.deposit,
+		rooms.key_money,
+		rooms.size,
+		rooms.floor,
+		rooms.sepToilet,
+		rooms.point
+		AS
+		room_point, rooms.other
+		AS
+		room_other,
+		<!-- ↓domainのOwner.javaのフィールド -->
+		owners.id as
+		owner_id,
+		owners.name
+		as
+		owner_name,
+		owners.birthday as
+		owner_birthday,
+		owners.owner_brokerage_fee,
+		owners.customer_brokerage_fee,
+		<!-- ↓domainのRoomImage.javaのフィールド -->
+		room_images.id as
+		room_images_id,
+		room_images.name as
+		room_images_name
+	</sql>
+
+
+
+	<sql id="columns">
+		<!-- domainのApart.java -->
+		aparts.id, aparts.id AS apart_id, aparts.name,
+		aparts.station1,
+		aparts.far1,
+		aparts.station2,
+		aparts.far2,
+		aparts.station3, aparts.far3,
+		aparts.address1,
+		aparts.address2,
+		aparts.material,
+		aparts.point,
+		aparts.other,
+		aparts.owner_id,
+		aparts.built_at,
+		aparts.img_name,
+		<!-- ↓domainのAll.javaのフィールド -->
+		TIMESTAMPDIFF(YEAR,
+		aparts.built_at, CURDATE()) AS old,
+		<!-- ↓domainのRoom.javaのフィールド -->
+		rooms.id
+		AS
+		room_id ,
+		rooms.apart_id,
+		rooms.number,
+		rooms.active,
+		rooms.price,
+		rooms.deposit,
+		rooms.key_money,
+		rooms.size,
+		rooms.floor,
+		rooms.sepToilet,
+		rooms.point
+		AS
+		room_point, rooms.other
+		AS
+		room_other,
+		<!-- ↓domainのOwner.javaのフィールド -->
+		owners.id as
+		owner_id,
+		owners.name
+		as
+		owner_name,
+		owners.birthday as
+		owner_birthday,
+		owners.owner_brokerage_fee,
+		owners.customer_brokerage_fee
+		<!-- ↓domainのRoomImage.javaのフィールド -->
+		<!-- room_images.id as room_images_id, room_images.name as room_images_name -->
+	</sql>
+
+
+	<resultMap id="joinResult" type="All" autoMapping="true">
+		<id property="id" column="id" />
+		<!-- <association property="room" javaType="Room" autoMapping="true"> <result 
+			property="point" column="room_point" /> <result property="other" column="room_other" 
+			/> <result property="id" column="room_id" /> </association> -->
+		<association property="apart" javaType="Apart"
+			autoMapping="true">
+			<result property="id" column="apart_id" />
+		</association>
+		<!-- <association property="image" javaType="Image" autoMapping="true" 
+			/> -->
+		<association property="owner" javaType="Owner"
+			autoMapping="true">
+			<result property="id" column="owner_id" />
+			<result property="name" column="owner_name" />
+			<result property="birthday" column="owner_birthday" />
+		</association>
+		<collection property="roomList" ofType="Room"
+			autoMapping="true">
+			<result property="point" column="room_point" />
+			<result property="other" column="room_other" />
+			<result property="id" column="room_id" />
+			<collection property="roomImageList" ofType="RoomImage"
+				autoMapping="true">
+				<result property="name" column="room_images_name" />
+				<result property="id" column="room_images_id" />
+			</collection>
+			<!-- <collection property="roomList" resultMap="a" /> -->
+		</collection>
+	</resultMap>
+	<!-- <resultMap id="a" type="Room" autoMapping="true"> <result property="point" 
+		column="room_point" /> <result property="other" column="room_other" /> <result 
+		property="id" column="room_id" /> <collection property="roomImageList" ofType="RoomImage" 
+		autoMapping="true"> <result property="name" column="room_images_name" /> 
+		</collection> </resultMap> -->
+
+
+
+	<select id="selectAll" resultMap="joinResult">
+		SELECT
+		<include refid="columns" />
+		FROM aparts JOIN rooms ON
+		aparts.id = rooms.apart_id
+		JOIN owners ON
+		aparts.owner_id = owners.id
+		<!-- <![CDATA[ JOIN room_images ON (rooms.apart_id = room_images.apart_id 
+			&& rooms.number = room_images.room_number)]]> -->
+		WHERE rooms.active
+		= 1;
+	</select>
+
+
+	<select id="selectByRoomId" parameterType="integer"
+		resultMap="joinResult">
+		SELECT
+		<include refid="noPager" />
+		FROM aparts JOIN rooms ON
+		aparts.id = rooms.apart_id
+		JOIN owners ON
+		aparts.owner_id = owners.id
+		 <![CDATA[ JOIN room_images ON
+		(rooms.apart_id = room_images.apart_id && rooms.id = room_images.room_id)]]>
+
+		WHERE
+		rooms.id =
+		#{id} AND
+		rooms.active = 1
+	</select>
+
+	<!-- <select id="selectByFilter" resultMap="joinResult"> SELECT <include 
+		refid="columns" /> FROM aparts JOIN rooms ON aparts.id = rooms.apart_id WHERE 
+		<![CDATA[ rooms.deposit <= #{apart.room.deposit}; ]]> <where> <foreach collection="list" 
+		item="materialList" open="(" close=")" separator="OR"> material LIKE CONCAT('%', 
+		#{materialList}, '%') </foreach> <![CDATA[ AND rooms.deposit <= #{apart.room.deposit} 
+		AND rooms.key_money <= #{apart.room.keyMoney} AND rooms.price <= #{apartFilter.rentT} 
+		AND rooms.price >= #{apartFilter.rentB} AND rooms.size >= #{apartFilter.sizeB} 
+		AND rooms.size <= #{apartFilter.sizeT} AND aparts.far1 <= #{apart.far1} AND 
+		rooms.active = 1]]> </where> ループが無い場合 WHERE aparts.material LIKE CONCAT('%', 
+		#{material}, '%'); </select> -->
+
+
+	<select id="selectByApartId" resultMap="joinResult">
+		SELECT
+		<include refid="noPager" />
+		FROM aparts JOIN rooms ON
+		aparts.id = rooms.apart_id
+		JOIN owners ON
+		aparts.owner_id = owners.id
+		 <![CDATA[ JOIN room_images ON
+		(rooms.apart_id = room_images.apart_id && rooms.id = room_images.room_id)]]>
+		WHERE aparts.id = #{id} ORDER BY rooms.number ASC
+		<!-- AND rooms.active = 1 -->
+	</select>
+
+
+
+	<select id="selectAllsByFilter" resultMap="joinResult">
+		SELECT
+		<include refid="columns" />
+		FROM aparts JOIN rooms ON aparts.id = rooms.apart_id
+		JOIN owners ON
+		aparts.owner_id = owners.id
+		<!-- <![CDATA[ JOIN room_images ON (rooms.apart_id = room_images.apart_id 
+			&& rooms.number = room_images.room_number)]]> -->
+		<where>
+			<if test="station != null">
+				<foreach collection="station" item="st" open="((" close=")"
+					separator="OR">
+					(station1 LIKE CONCAT('%',
+					#{st}, '%') AND <![CDATA[ far1 <= #{all.apart.far1} ) ]]>
+				</foreach>
+				<foreach collection="station" item="st" open="OR ("
+					close=")" separator="OR">
+					(station2 LIKE CONCAT('%',
+					#{st}, '%') AND <![CDATA[ far2 <= #{all.apart.far1}) ]]>
+				</foreach>
+				<foreach collection="station" item="st" open="OR ("
+					close="))" separator="OR">
+					(station3 LIKE CONCAT('%',
+					#{st}, '%') AND <![CDATA[ far3 <= #{all.apart.far1}) ]]>
+				</foreach>
+			</if>
+			<if test="address1 != null">
+				<foreach collection="address1" item="ad" open="(" close=")"
+					separator="OR">
+					(address1 LIKE CONCAT('%', #{ad}, '%'))
+				</foreach>
+			</if>
+			<foreach collection="material" item="ma" open="AND("
+				close=")" separator="OR"> material LIKE CONCAT('%',
+				#{ma}, '%')
+			</foreach>
+			AND 
+			 <![CDATA[ rooms.deposit <= #{all.apartFilter.deposit} AND rooms.key_money 
+				<= #{all.apartFilter.keyMoney} AND rooms.price <= #{all.apartFilter.rentT} AND rooms.price 
+				>= #{all.apartFilter.rentB} AND rooms.size >= #{all.apartFilter.sizeB} AND rooms.size 
+				<= #{all.apartFilter.sizeT} AND rooms.active = 1 LIMIT #{offset}, #{limit}]]>
+		</where>
+		<!--ループが無い場合 WHERE aparts.material LIKE CONCAT('%', #{material}, '%'); -->
+	</select>
+
+
+	<select id="countSelectAllsByFilter" resultType="long">
+		SELECT COUNT(*)
+		FROM aparts JOIN rooms ON aparts.id = rooms.apart_id
+		JOIN owners ON
+		aparts.owner_id = owners.id
+		<!-- <![CDATA[ JOIN room_images ON (rooms.apart_id = room_images.apart_id 
+			&& rooms.number = room_images.room_number)]]> -->
+
+		<!-- WHERE <![CDATA[ rooms.deposit <= #{apart.room.deposit}; ]]> -->
+		<where>
+			<if test="station != null">
+				<foreach collection="station" item="st" open="((" close=")"
+					separator="OR">
+					(station1 LIKE CONCAT('%',
+					#{st}, '%') AND <![CDATA[ far1 <= #{all.apart.far1} ) ]]>
+				</foreach>
+				<foreach collection="station" item="st" open="OR ("
+					close=")" separator="OR">
+					(station2 LIKE CONCAT('%',
+					#{st}, '%') AND <![CDATA[ far2 <= #{all.apart.far1}) ]]>
+				</foreach>
+				<foreach collection="station" item="st" open="OR ("
+					close="))" separator="OR">
+					(station3 LIKE CONCAT('%',
+					#{st}, '%') AND <![CDATA[ far3 <= #{all.apart.far1}) ]]>
+				</foreach>
+			</if>
+			<if test="address1 != null">
+				<foreach collection="address1" item="ad" open="(" close=")"
+					separator="OR">
+					(address1 LIKE CONCAT('%', #{ad}, '%'))
+				</foreach>
+			</if>
+			<foreach collection="material" item="ma" open="AND("
+				close=")" separator="OR"> material LIKE CONCAT('%',
+				#{ma}, '%')
+			</foreach>
+			AND <![CDATA[ rooms.deposit <= #{all.apartFilter.deposit} AND rooms.key_money 
+				<= #{all.apartFilter.keyMoney} AND rooms.price <= #{all.apartFilter.rentT} AND rooms.price 
+				>= #{all.apartFilter.rentB} AND rooms.size >= #{all.apartFilter.sizeB} AND rooms.size 
+				<= #{all.apartFilter.sizeT} AND rooms.active = 1 ]]>
+			<!-- <![CDATA[ rooms.deposit <= #{apart.room.deposit} AND rooms.key_money 
+				<= #{apart.room.keyMoney} AND rooms.price <= #{apartFilter.rentT} AND rooms.price 
+				>= #{apartFilter.rentB} AND rooms.size >= #{apartFilter.sizeB} AND rooms.size 
+				<= #{apartFilter.sizeT} AND rooms.active = 1 ]]> -->
+		</where>
+		<!--ループが無い場合 WHERE aparts.material LIKE CONCAT('%', #{material}, '%'); -->
+	</select>
+
+
+	<select id="selectAllsByStation" resultMap="joinResult">
+		SELECT
+		<include refid="columns" />
+		FROM aparts JOIN rooms ON
+		aparts.id = rooms.apart_id
+		JOIN owners ON
+		aparts.owner_id = owners.id
+		<!-- <![CDATA[ JOIN room_images ON (rooms.apart_id = room_images.apart_id 
+			&& rooms.number = room_images.room_number)]]> -->
+		<where>
+			<foreach collection="stationList" item="sta" open="(("
+				close=")" separator="OR">
+				station1 LIKE CONCAT('%', #{sta}, '%')
+			</foreach>
+			<foreach collection="stationList" item="sta" open="OR("
+				close=")" separator="OR">
+				station2 LIKE CONCAT('%', #{sta}, '%')
+			</foreach>
+			<foreach collection="stationList" item="sta" open="OR("
+				close="))" separator="OR">
+				station3 LIKE CONCAT('%', #{sta}, '%')
+			</foreach>
+			AND rooms.active = 1 LIMIT #{offset}, #{limit}
+		</where>
+	</select>
+
+	<!-- <select id="countSelectByStation" resultMap="joinResult"> SELECT <include 
+		refid="columns" /> FROM aparts JOIN rooms ON aparts.id = rooms.apart_id JOIN 
+		owners ON aparts.owner_id = owners.id JOIN images ON aparts.id = images.apart_id 
+		<![CDATA[ JOIN room_images ON (rooms.apart_id = room_images.apart_id && rooms.number 
+		= room_images.room_number)]]> <where> <foreach collection="stationList" item="sta" 
+		open="((" close=")" separator="OR"> station1 LIKE CONCAT('%', #{sta}, '%') 
+		</foreach> <foreach collection="stationList" item="sta" open="OR(" close=")" 
+		separator="OR"> station2 LIKE CONCAT('%', #{sta}, '%') </foreach> <foreach 
+		collection="stationList" item="sta" open="OR(" close="))" separator="OR"> 
+		station3 LIKE CONCAT('%', #{sta}, '%') </foreach> AND rooms.active = 1 </where> 
+		</select> -->
+
+
+	<select id="countSelectAllsByStation" resultType="long">
+		SELECT COUNT(*)
+		FROM aparts JOIN rooms ON aparts.id = rooms.apart_id
+		JOIN owners ON
+		aparts.owner_id
+		= owners.id
+		<!-- <![CDATA[ JOIN room_images ON (rooms.apart_id = room_images.apart_id 
+			&& rooms.number = room_images.room_number)]]> -->
+		<where>
+			<foreach collection="list" item="station" open="((" close=")"
+				separator="OR">
+				station1 LIKE CONCAT('%', #{station}, '%') </foreach>
+			<foreach collection="list" item="station" open="OR("
+				close=")" separator="OR"> station2 LIKE CONCAT('%',
+				#{station}, '%')
+			</foreach>
+			<foreach collection="list" item="station" open="OR("
+				close="))" separator="OR"> station3 LIKE CONCAT('%', #{station}, '%')
+			</foreach>
+			AND rooms.active = 1
+		</where>
+	</select>
+
+
+	<select id="selectAllsByAddress1" resultMap="joinResult">
+		SELECT
+		<include refid="columns" />
+		FROM aparts JOIN rooms ON
+		aparts.id = rooms.apart_id
+		JOIN owners ON
+		aparts.owner_id = owners.id
+
+		<!-- <![CDATA[ JOIN room_images ON (rooms.apart_id = room_images.apart_id 
+			&& rooms.number = room_images.room_number)]]> -->
+
+		<where>
+			<foreach collection="address1List" item="ad" open="(("
+				close="))" separator="OR">
+				address1 LIKE CONCAT('%', #{ad}, '%')
+			</foreach>
+			AND rooms.active = 1 LIMIT #{offset}, #{limit}
+		</where>
+	</select>
+
+
+	<select id="countSelectAllsByAddress1" resultType="long">
+		SELECT COUNT(*) FROM aparts JOIN rooms ON
+		aparts.id = rooms.apart_id
+		JOIN owners ON
+		aparts.owner_id = owners.id
+		<!-- <![CDATA[ JOIN room_images ON (rooms.apart_id = room_images.apart_id 
+			&& rooms.number = room_images.room_number)]]> -->
+		<where>
+			<foreach collection="list" item="ad" open="(" close=")"
+				separator="OR">
+				address1 LIKE CONCAT('%', #{ad}, '%')
+			</foreach>
+			AND rooms.active = 1
+		</where>
+	</select>
+
+
+</mapper>

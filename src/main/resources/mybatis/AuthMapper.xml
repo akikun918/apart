@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.mapper.AuthMapper">
+
+
+	<select id="selectByLoginId" resultType="Auth">
+		SELECT * FROM auths
+		WHERE login_id = #{loginId}
+	</select>
+
+
+	<insert id="register">
+		INSERT INTO auths VALUES(NULL,
+		#{loginId},
+		#{loginPass},#{fRoomId1} ,#{fRoomId1} ,#{fRoomId1} ,#{fRoomId1}
+		,#{fRoomId1} ,#{fRoomId1} ,#{fRoomId1} ,#{fRoomId1}
+		,#{fRoomId1}
+		,#{fRoomId1})
+	</insert>
+
+
+	<update id="favoriteAdd">
+		UPDATE auths SET
+		f_room_id1 = #{fRoomId1},
+		f_room_id2 =
+		#{fRoomId2},
+		f_room_id3 = #{fRoomId3},
+		f_room_id4 = #{fRoomId4},
+		f_room_id5 = #{fRoomId5},
+		f_room_id6 = #{fRoomId6},
+		f_room_id7 =
+		#{fRoomId7},
+		f_room_id8 = #{fRoomId8},
+		f_room_id9 = #{fRoomId9},
+		f_room_id10 = #{fRoomId10}
+		WHERE
+		login_id = #{loginId}
+	</update>
+
+
+
+</mapper>

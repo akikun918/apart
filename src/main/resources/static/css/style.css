@@ -1,0 +1,37 @@
+@charset "utf-8"; 
+ 
+.header-outer { 
+    height: 160px; 
+    background-image: url(../images/header.png); 
+    background-size: cover; 
+    background-position: 50% 50%; 
+    text-shadow: 1px 1px 2px #000; 
+}
+
+.error {
+	color: #f00;
+}
+
+.news_target span {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+ul {
+    list-style: none;
+}
+
+.noevent {
+	pointer-events: none;
+}
+
+
+/* 
+.table {
+	margin-bottom: 0;
+}
+ 
+ .mb-0 {
+    margin-bottom: 2em!important;
+}
+ */

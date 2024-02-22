@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>[[${title}]]</title>
+</head>
+
+<body>
+	<!-- <th:block th:object="${player}">
+		<p th:errors="*{name}"></p>
+		<p th:errors="*{position}"></p>
+		<p th:errors="*{birthday}"></p>
+	</th:block> -->
+	<p><a th:href="@{/admin/menu}">メニューへ</a></p>
+		<p><a th:href="@{/admin/ownerList}">オーナー一覧へ</a></p>
+	
+	
+	<h1>[[${title}]]</h1>
+
+	<!--	<th:block th:if="${owner.name == null}">-->
+	<!--		<form th:action="@{/admin/ownerAdd}" method="post" th:object="${owner}">
+-->
+	<!-- 	<form action="" method="post" th:object="${owner}">
+ -->
+	<th:block th:if="${owner.name == null}">
+		<form th:action="@{/admin/ownerAdd}" method="post">
+	</th:block>
+	<th:block th:if="${owner.name != null}">
+		<form th:action="@{/admin/ownerEdit}" method="post">
+	</th:block>
+	<th:block th:object="${owner}">
+
+		<input type="hidden"  th:field="*{id}" >
+		<p>
+			名前： <input type="text" th:field="*{name}" />
+		</p>
+		<p>
+			生年月日： <input type="date" th:field="*{birthday}" />
+		</p>
+		<p>
+			オーナー様への仲介手数料： <input type="text" th:field="*{ownerBrokerageFee}" />
+		</p>
+		<p>
+			お客様からの仲介手数料： <input type="text" th:field="*{customerBrokerageFee}" />
+		</p>
+
+		<p>
+			<input type="submit" value="登録" />
+		</p>
+
+	</th:block>
+
+	</form>
+
+
+
+</body>
+
+</html>

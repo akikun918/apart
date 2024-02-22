@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>画像一覧・保存</title>
+</head>
+<body>
+	<h1>画像一覧・保存</h1>
+	<!-- 保存 -->
+	<!--  enctype="multipart/form-data"
+	ファイルをアップロードするときに必須 -->
+	<form action="" method="post" enctype="multipart/form-data">
+		<input type="file" name="upload"/>
+		<input type="submit" value="アップロード"/>
+	</form>
+	<p>[[${msg}]]</p>
+	
+	<style>
+		img {width: 20%;}
+	</style>
+	<!-- 一覧 -->
+	<h2>Static/画像</h2>
+	<img th:src="@{/img/fukui1.jpg}" alt="" />
+	<img th:src="@{/img/fukui2.jpg}" alt="" />
+	<img th:src="@{/img/fukui3.jpg}" alt="" />
+	
+	<h2>DB/画像</h2>
+	<!-- <img th:src="@{/uploads/animal1.jpg}" alt="" /> -->
+	<img th:each="image : ${imgList}" th:src="@{/uploads/{name}(name=${image.imgName})}" alt="" />
+</body>
+</html>

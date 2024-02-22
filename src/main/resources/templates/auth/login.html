@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>会員ログイン</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class=" col-12 col-xl-9  m-auto">
+				<nav class="navbar  navbar-expand-md navbar-dark bg-dark sticky-top">
+					<div class="container">
+						<h1>
+							<a class="navbar-brand" th:href="@{/}">B HOME'S</a>
+						</h1>
+						<button class="navbar-toggler" data-bs-toggle="collapse"
+							data-bs-target="#menu">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="menu">
+							<ul class="navbar-nav">
+								<li class="nav-item"><a th:href="@{/}"
+									class="nav-link active">Home</a></li>
+								<li class="nav-item"><a th:href="@{/rent/favoriteShow}"
+									class="nav-link">お気に入り</a></li>
+								<li class="nav-item"><a class="nav-link">会社概要</a> <!-- <a th:href="@{/mainta}" class="nav-link">会社概要</a> --></li>
+								<li class="nav-item"><a th:href="@{/auth/register}"
+									class="nav-link">会員登録</a></li>
+								<li class="nav-item"><a th:href="@{/auth/login}"
+									class="nav-link">ログイン</a></li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+	</div>
+	<div class="text-center mt-4">
+		<h1>[[${title}]]</h1>
+		<br> <font color="#ff4500"> <th:block th:if="${fav}">
+		[[${fav}]]
+		</th:block>
+		</font>
+
+		<th:block th:unless="${session.loginId}">
+			<form class="mt-4" th:action="@{/auth/login}" method="post"
+				th:object="${auth}">
+				<!--				<span th:errors="*{loginId}" class="error"></span>
+-->
+				<p class="mt-2">
+					ログインID： <input type="text" th:field="*{loginId}">
+				</p>
+				<p>
+					パスワード：<input type="password" th:field="*{loginPass}">
+				</p>
+				<input class="btn btn-primary" type="submit" value="ログイン">
+			</form>
+			<a th:href="@{/auth/register}" class="nav-link">会員登録へ</a>
+		</th:block>
+
+
+
+	</div>
+</body>
+
+</html>

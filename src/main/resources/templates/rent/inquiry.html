@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>a</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+	<div class="container ">
+		<div class="row">
+			<div class=" col-12 col-xl-9  m-auto">
+				<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+					<div class="container">
+						<h1>
+							<a class="navbar-brand" th:href="@{/}">B HOME'S</a>
+						</h1>
+						<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="menu">
+							<ul class="navbar-nav">
+								<li class="nav-item"><a th:href="@{/}" class="nav-link active">Home</a></li>
+								<li class="nav-item"><a th:href="@{/rent/favoriteShow}" class="nav-link">お気に入り</a></li>
+								<li class="nav-item"><a class="nav-link">会社概要</a>
+									<!-- <a th:href="@{/mainta}" class="nav-link">会社概要</a> --></li>
+								<li class="nav-item"><a th:href="@{/auth/register}" class="nav-link">会員登録</a></li>
+								<li class="nav-item"><a th:href="@{/auth/login}" class="nav-link">ログイン</a></li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+				<div class="container">
+					<div class="row">
+						<div class=" col-12   m-auto">
+							<form th:method="post" th:action="@{/rent/inquiry}">
+								<input type="hidden" th:field="${all.apart.id}">
+								<table th:object="${inquiry}">
+									<tr>
+										<th>お問い合わせ物件</th>
+										<td>
+											<p>
+												<img th:src="@{/uploads/{name}(name=${all.apart.imgName})}"
+													th:alt="${all.apart.name}" width="115" height="87" />
+											</p>
+											<dl>
+												<dt>[[${all.apart.name}]]</dt>
+												<dd>[[${all.apart.address1}]]</dd>
+											</dl>
+										</td>
+
+									</tr>
+
+									<tr>
+										<th>お名前</th>
+										<td><strong>必須</strong></td>
+										<td><input th:field="*{name}" type="text" maxlength="15"
+												style="ime-mode: active;" class="validate[required]" /></td>
+										<td th:errors="*{name}"></td>
+									</tr>
+									<tr>
+										<th>E-mail</th>
+										<td><strong>必須</strong></td>
+										<td><input th:field="*{mail}" type="text" maxlength="100"
+												style="ime-mode: disabled;" class="validate[required,custom[email]]" />
+										</td>
+										<td th:errors="*{mail}"></td>
+									</tr>
+									<tr>
+										<th>電話番号</th>
+										<td><strong>必須</strong></td>
+										<td><input th:field="*{tel}" type="number" maxlength="30"
+												style="ime-mode: disabled;" class="validate[custom[phone]]" /></td>
+										<td th:errors="*{tel}"></td>
+									</tr>
+
+									<!--<tr>
+								<th><img src="../../imgs/inquiry/iq_work.png" alt="職業" /></th>
+								<td><strong><img src="../../imgs/inquiry/hissu.png" alt="必須" class="hissu" width="28" height="16" /></strong>
+								</td>
+								<td><em>※例）会社員　学生</em>
+									<br /><input name="iq_work" type="text" maxlength="40" value=""
+										style="ime-mode:active;" />
+								</td>
+							</tr>-->
+									<tr>
+										<th>入居予定時期</th>
+										<td><strong>必須</strong></td>
+										<td><select th:field="*{movetime}">
+												<option th:value="今月" selected="selected">今月</option>
+												<option th:value="来月">来月</option>
+												<option th:value="再来月以降">再来月以降</option>
+												<option th:value="未定">未定</option>
+											</select></td>
+
+									</tr>
+									<tr>
+										<th>お問い合わせ概要</th>
+										<td><strong>必須</strong></td>
+										<td><select th:field="*{about}">
+												<option th:value="見学希望" selected="selected">見学希望</option>
+												<option th:value="空室状況を知りたい">空室状況を知りたい</option>
+												<option th:value="その他">その他</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>お問い合わせ内容</th>
+										<td><strong>必須</strong></td>
+										<td><em>※質問事項、希望などをご記入ください</em> <br /> <textarea th:field="*{detail}" rows="4"
+												cols="25"></textarea></td>
+										<td th:errors="*{detail}"></td>
+
+									</tr>
+
+								</table>
+								<p>
+									<input type="submit" value="送信する" id="btn" />
+								</p>
+
+							</form>
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+
+				</div>
+				<!-- container -->
+
+
+
+
+
+				<div class="container bg-dark text-light text-center col-12    pt-4 pb-2">
+					<footer th:replace="~{parts/common :: page_footer}"></footer>
+				</div>
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.container  -->
+
+
+	<script src="../js/bootstrap.bundle.min.js"></script>
+
+
+	<script>
+		$(document).ready(function () {
+			const origin = $('#stage img').attr('src');
+			$('#thumb img').click(function () {
+				const image = $(this).attr('src');
+				$('#stage img').attr('src', image);
+			});
+			var btn = document.getElementById('btn');
+			btn.addEventListener('click', function () {
+				alert("お気に入りは10件まで登録できます。10件を超えると古い順から削除されます。");
+				//submit()でフォームの内容を送信
+				document.myform.submit();
+			})
+		});
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<h1>アパート一覧</h1>
+	<p>
+		<a th:href="@{/admin/ownerAdd}"> オーナー新規登録 </a>
+	</p>
+	<p>
+		<a th:href="@{/admin/apartAdd}"> アパート新規登録 </a>
+	</p>
+	<table border="1">
+		<tr>
+			<th>アパート名</th>
+			<th>オーナー名</th>
+			<th colspan="2">操作</th>
+		</tr>
+		<tr th:each="apart : ${aparts}" th:object="${apart}">
+			<td><a th:href="@{/rent/detail(id=*{id})}"> [[*{name}]]
+			</a></td>
+			<td><a th:href="@{/rent/detail(id=*{owner.id})}">
+					[[*{owner.name}]] </a></td>
+			<td><a th:href="@{/players/edit/{id}(id=*{id})}">編集</a></td>
+			<td><a th:href="@{/players/delete/{id}(id=*{id})}">削除</a></td>
+		</tr>
+	</table>
+
+
+
+
+
+
+
+</body>
+</html>

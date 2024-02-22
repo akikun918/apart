@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>a</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class=" col-12 col-xl-10  m-auto">
+				<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+					<div class="container">
+						<h1>
+							<a class="navbar-brand" th:href="@{/}">B HOME'S</a>
+						</h1>
+						<button class="navbar-toggler" data-bs-toggle="collapse"
+							data-bs-target="#menu">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="menu">
+							<ul class="navbar-nav">
+								<li class="nav-item"><a th:href="@{/}"
+									class="nav-link active">Home</a></li>
+								<li class="nav-item"><a th:href="@{/rent/favoriteShow}"
+									class="nav-link">お気に入り</a></li>
+								<li class="nav-item"><a class="nav-link">会社概要</a> <!-- <a th:href="@{/mainta}" class="nav-link">会社概要</a> --></li>
+								<li class="nav-item"><a th:href="@{/auth/register}"
+									class="nav-link">会員登録</a></li>
+								<li class="nav-item"><a th:href="@{/auth/login}"
+									class="nav-link">ログイン</a></li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+
+
+				<div class="container my-4">
+					<main>
+						<div class="row">
+							<div class="col-9 m-auto">
+								<h2>お気に入り</h2>
+								<th:block th:if="${allList.isEmpty}">
+									<br>
+									<h3>まだお気に入りが登録されていません</h3>
+									<br>
+									<h3>
+										<a th:href="@{/}">ホームへ</a>
+									</h3>
+								</th:block>
+
+								<th:block th:each="all : ${allList}" th:object="${all}">
+									<th:block th:each="room : *{roomList}">
+										<div class="row  mt-5">
+											<!--<img th:each="image : *{imageList}"
+										th:src="@{/uploads/{name}(name=${image.imgName})}" alt="" width="100"
+										height="100" />-->
+											<div class="col-4">
+												<img class=" w-100"
+													th:src="@{/uploads/{name}(name=*{apart.imgName})}" alt=""
+													width="180" height="180" />
+											</div>
+											<!-- /.col -->
+											<div class="col-8">
+												<h3>
+													<a th:href="@{/rent/detail(id=${room.id})}" target="_blank">[[*{apart.name}]]</a>
+												</h3>
+												<div class="row">
+													<div class="col-5">
+														<p>[[*{apart.address1}]]</p>
+													</div>
+													<!-- /.col -->
+													<div class="col-5">
+														<div style="font-weight: bold">
+															[[*{apart.station1}]] 駅 徒歩[[*{apart.far1}]]分</div>
+														<div th:if="*{apart.station2 != null}">
+															[[*{apart.station2}]] 駅 徒歩[[*{apart.far2}]]分</div>
+														<div th:if="*{apart.station3 != null}">
+															[[*{apart.station3}]] 駅 徒歩[[*{apart.far3}]]分</div>
+													</div>
+													<!-- /.col -->
+													<div class="col-2">
+
+														<p>築[[*{old}]]年</p>
+
+													</div>
+													<!-- /.col -->
+													<!--<div class="col-2">
+
+														<p>[[*{apart.point}]]</p>
+
+													</div> /.col -->
+
+												</div>
+												<!-- /.row -->
+											</div>
+											<!-- /.col -->
+											<div class="col-12">
+
+
+
+												<table class="table">
+													<thead>
+														<tr class="table-secondary">
+															<th>階</th>
+															<th>賃料/管理費</th>
+															<th>敷金/礼金</th>
+															<th>広さ</th>
+															<!--		<th>特徴</th>-->
+															<th>お気に入り</th>
+															<th>&nbsp;</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>[[${room.floor}]]階</td>
+															<td>[[${#numbers.formatInteger(room.price, 3,
+																'COMMA')}]]円</td>
+															<td><th:block th:if="${room.deposit == 0}">無料</th:block>
+
+																<div th:unless="${room.deposit == 0}">
+																	[[${#numbers.formatInteger(room.deposit, 3,
+																	'COMMA')}]]/</div>
+
+																<div th:if="${room.keyMoney == 0}">無料</div>
+																<div th:unless="${room.keyMoney == 0}">
+																	[[${#numbers.formatInteger(room.keyMoney, 3,
+																	'COMMA')}]]円</div></td>
+															<td>[[${room.size}]]畳</td>
+
+															<td><div>[[*{apart.point}]]</div>
+																<div>[[${room.point}]]</div></td>
+															<!-- 	<td><a href="">追加</a></td> -->
+															<td>
+																<div>
+																	<a th:href="@{/rent/detail(id=${room.id}) }"
+																		target="_blank">詳細を見る</a>
+																</div> <!-- 			<a th:href="@{/rent/detail/{id}(id=*{id})}">詳細を見る</a> -->
+																<div>
+																	<a th:href="@{/rent/inquiry(id=${room.id})}">お問い合わせ</a>
+																</div>
+															</td>
+														</tr>
+
+													</tbody>
+												</table>
+
+
+
+
+											</div>
+											<!-- /.col -->
+
+										</div>
+										<!-- /.row -->
+									</th:block>
+								</th:block>
+							</div>
+							<!-- /.col -->
+							<div class="col-12">
+								<div th:if="${session.keySet().contains('address1List')  }">
+									<div th:unless="${session.keySet().contains('all') }">
+
+										<div th:if="${totalPage >= 2}">
+											<ul>
+												<!-- 前のページリンク -->
+												<th:block th:switch="${page}">
+													<li th:case="1"><a href="" class="noevent">前ページ</a></li>
+
+													<li th:case="*"><a
+														th:href="@{/rent/areaShow(page=${page-1})}">前ページ</a></li>
+
+												</th:block>
+
+												<!-- ページ番号 -->
+												<th:block
+													th:each="index : ${#numbers.sequence(1, totalPage)}">
+													<th:block th:switch="${index}">
+														<li th:case="${page}"><a href="" class="noevent">[[${index}]]</a></li>
+														<li th:case="*"><a
+															th:href="@{/rent/areaShow(page=${index})}">[[${index}]]</a>
+														</li>
+													</th:block>
+												</th:block>
+
+												<!-- 次のページリンク -->
+												<th:block th:switch="${page}">
+													<li th:case="${totalPage}"><a href="" class="noevent">次ページ</a>
+													</li>
+													<li th:case="*"><a
+														th:href="@{/rent/areaShow(page=${page+1})}">次ページ</a></li>
+												</th:block>
+											</ul>
+										</div>
+									</div>
+								</div>
+
+								<div th:if="${session.keySet().contains('stationList') }">
+									<div th:unless="${session.keySet().contains('all') }">
+										<div th:if="${totalPage >= 2}">
+											<ul>
+												<!-- 前のページリンク -->
+												<th:block th:switch="${page}">
+													<li th:case="1"><a href="" class="noevent">前ページ</a></li>
+
+													<li th:case="*"><a
+														th:href="@{/rent/stationShow(page=${page-1})}">前ページ</a></li>
+
+												</th:block>
+
+												<!-- ページ番号 -->
+												<th:block
+													th:each="index : ${#numbers.sequence(1, totalPage)}">
+													<th:block th:switch="${index}">
+														<li th:case="${page}"><a href="" class="noevent">[[${index}]]</a></li>
+														<li th:case="*"><a
+															th:href="@{/rent/stationShow(page=${index})}">[[${index}]]</a>
+														</li>
+													</th:block>
+												</th:block>
+
+												<!-- 次のページリンク -->
+												<th:block th:switch="${page}">
+													<li th:case="${totalPage}"><a href="" class="noevent">次ページ</a>
+													</li>
+													<li th:case="*"><a
+														th:href="@{/rent/stationShow(page=${page+1})}">次ページ</a></li>
+												</th:block>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div th:if="${session.keySet().contains('all')  }">
+									<div th:if="${totalPage >= 2}">
+										<ul>
+											<!-- 前のページリンク -->
+											<th:block th:switch="${page}">
+												<li th:case="1"><a href="" class="noevent">前ページ</a></li>
+												<li th:case="*"><a
+													th:href="@{/rent/filteredShow(page=${page-1})}">前ページ</a></li>
+											</th:block>
+
+											<!-- ページ番号 -->
+											<th:block
+												th:each="index : ${#numbers.sequence(1, totalPage)}">
+												<th:block th:switch="${index}">
+													<li th:case="${page}"><a href="" class="noevent">[[${index}]]</a>
+													</li>
+													<li th:case="*"><a
+														th:href="@{/rent/filteredShow(page=${index})}">[[${index}]]</a>
+													</li>
+												</th:block>
+											</th:block>
+											<!-- 次のページリンク -->
+											<th:block th:switch="${page}">
+												<li th:case="${totalPage}"><a href="" class="noevent">次ページ</a></li>
+												<li th:case="*"><a
+													th:href="@{/rent/filteredShow(page=${page+1})}">次ページ</a></li>
+											</th:block>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- /.col -->
+						</div>
+						<!-- /.row -->
+					</main>
+				</div>
+				<!-- /.container -->
+
+				<th:block th:unless="${noFavRegistered}">
+
+
+					<div
+						class="container-fluid bg-dark text-light text-center pt-4 pb-2">
+						<footer th:replace="~{parts/common :: page_footer}"></footer>
+					</div>
+					<!-- /.container my-4" -->
+				</th:block>
+
+
+
+
+
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+	</div>
+	<script src="../js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

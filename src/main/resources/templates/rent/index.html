@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>ページタイトル</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<!--	<link href="css/style.css" rel="stylesheet">
+-->
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class=" col-12 col-xl-9  m-auto">
+				<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+					<div class="container">
+						<h1>
+							<a class="navbar-brand" th:href="@{/}">B HOME'S</a>
+						</h1>
+						<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="menu">
+							<ul class="navbar-nav">
+								<li class="nav-item"><a th:href="@{/}" class="nav-link active">Home</a></li>
+								<li class="nav-item"><a th:href="@{/rent/favoriteShow}" class="nav-link">お気に入り</a></li>
+								<li class="nav-item"><a class="nav-link">会社概要</a>
+									<!-- <a th:href="@{/mainta}" class="nav-link">会社概要</a> --></li>
+								<li class="nav-item"><a th:href="@{/auth/register}" class="nav-link">会員登録</a></li>
+								<li class="nav-item"><a th:href="@{/auth/login}" class="nav-link">ログイン</a></li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+
+
+				<div class="container my-4">
+					<header>
+						<!--<h1><a href="">Woody Cafe</a></h1>
+				<nav>
+					<ul>
+						<li><a th:href="@{/}">ホーム</a></li>
+						<li><a th:href="@{/mainta}">お気に入り</a></li>
+						<li><a th:href="@{/mainta}">会社情報</a></li>
+						<li><a th:href="@{/mainta}">会員登録</a></li>
+						<li><a th:href="@{/mainta}">ログイン</a></li>
+					</ul>
+				</nav>-->
+						<h2>賃貸検索</h2>
+						<P> 最寄り駅か地域から検索してください。</P>
+					</header>
+				</div>
+				<div class="container my-4">
+					<main>
+						<div class="row">
+							<div class="col-lg-7 ">
+								<h3>駅から探す</h3>
+								<form th:action="@{/rent/stationShow}">
+									<p> 中央線</p>
+									<label><input type="checkbox" name="station" value="東中野" />東中野</label>
+									<label><input type="checkbox" name="station" value="中野" />中野</label>
+									<label><input type="checkbox" name="station" value="高円寺" />高円寺</label>
+									<label><input type="checkbox" name="station" value="阿佐ヶ谷" />阿佐ヶ谷</label>
+									<label><input type="checkbox" name="station" value="荻窪" />荻窪</label>
+									<p class=" my-4">丸の内線</p>
+									<label><input type="checkbox" name="station" value="南阿佐ヶ谷" />南阿佐ヶ谷</label>
+									<label><input type="checkbox" name="station" value="新高円寺" />新高円寺</label>
+									<label><input type="checkbox" name="station" value="東高円寺" />東高円寺</label>
+									<label><input type="checkbox" name="station" value="新中野" />新中野</label>
+									<label><input type="checkbox" name="station" value="中野坂上" />中野坂上</label>
+									<p><input type="submit" /> </p>
+								</form>
+							</div><!-- /.col -->
+							<div class="col-lg-4">
+								<h3>エリアから探す</h3>
+								<form th:action="@{/rent/areaShow}">
+									<p>杉並区・中央区 </p>
+									<label><input type="checkbox" name="address1" value="杉並" />杉並区</label>
+									<label><input type="checkbox" name="address1" value="中野" />中野区</label>
+									<p><input type="submit" /> </p>
+								</form>
+
+
+								<!--<li><a href="preGame">詳しく探す</a></li>
+				<li><a href="preGame">フリーワードから探す</a></li>
+
+
+				<a th:href="@{/}">ホーム</a>-->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</main>
+				</div>
+				<br><br><br><br>
+				<div class="container-fluid bg-dark text-light text-center pt-4 pb-2">
+					<footer th:replace="~{parts/common :: page_footer}"></footer>
+				</div><!-- /.container my-4" -->
+			</div> <!--/.col -->
+		</div> <!--/.row -->
+	</div>
+
+
+
+	<script src="js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

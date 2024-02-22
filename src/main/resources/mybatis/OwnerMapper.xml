@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.mapper.OwnerMapper">
+
+	<insert id="add">
+		INSERT INTO owners VALUES(NULL,
+		#{name}, #{birthday},
+		#{ownerBrokerageFee}, #{customerBrokerageFee})
+	</insert>
+
+
+
+	<select id="selectAll" resultType="Owner">
+		SELECT *
+		FROM
+		owners
+	</select>
+
+
+	<select id="selectById" resultType="Owner">
+		SELECT * FROM owners WHERE
+		owners.id = #{id}
+	</select>
+
+
+	<update id="edit">
+		UPDATE owners SET
+		name = #{name},
+		id = #{id},
+		birthday = #{birthday},
+		owner_brokerage_fee =
+		#{ownerBrokerageFee},
+		customer_brokerage_fee = #{customerBrokerageFee}
+		WHERE id = #{id}
+	</update>
+
+
+
+
+</mapper>

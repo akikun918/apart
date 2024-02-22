@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>オーナー一覧・新規登録・編集</title>
+</head>
+
+<body>
+
+	<p><a th:href="@{/admin/menu}">メニューへ</a></p>
+
+	<h1>オーナー一覧・新規登録・編集</h1>
+	<h2>
+		<a th:href="@{/admin/ownerAdd}"> 新規登録 </a>
+	</h2>
+
+	<h2>一覧・編集</h2>
+	<table border="1">
+		<tr>
+			<th>名前</th>
+			<th>ID</th>
+			<th>お誕生日（生年月日）</th>
+			<th>オーナーへの仲介手数料</th>
+			<th>客先仲介手数料</th>
+			<th></th>
+		</tr>
+		<tr th:each="owner : ${owners}" th:object="${owner}">
+			<td>[[*{name}]]</td>
+			<td>[[*{id}]]</td>
+			<td>[[*{birthday}]]</td>
+			<td>[[*{ownerBrokerageFee}]]</td>
+			<td>[[*{customerBrokerageFee}]]</td>
+			<td><a th:href="@{/admin/ownerEdit(id=*{id})}">編集</a></td>
+		</tr>
+	</table>
+</body>
+
+</html>

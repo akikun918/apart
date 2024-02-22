@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+<body>
+
+	<p>
+		<a th:href="@{/admin/menu}">メニューへ</a>
+	</p>
+	<p>
+		<a th:href="@{/admin/apartList}">アパート一覧へ</a>
+	</p>
+
+	<th:block th:if="${all == null}">
+		<p>まだ部屋が登録されていません</p>
+		<h1>
+			<a th:href="@{/admin/roomAdd(id=*{id})}"> 新規登録 </a>
+		</h1>
+
+
+
+
+	</th:block>
+
+
+	<th:block th:if="${all != null}">
+		<th:block th:object="${all}">
+			<h1>[[*{apart.name}]]</h1>
+			<h2>
+				<a th:href="@{/admin/roomAdd(id=*{apart.id})}"> 部屋新規登録 </a>
+			</h2>
+			<th:block th:each="room : *{roomList}" th:object="${room}">
+				<h2>
+					[[*{number}]]号室<a th:href="@{/admin/roomEdit(id=*{id})}"> 部屋編集
+					</a>
+				</h2>
+
+
+				<th:block th:each="roomImage : *{roomImageList}"
+					th:object="${roomImage}">
+					<img th:src="@{/uploads/{name}(name=*{name})}" alt="" width="120"
+						height="120" />
+				</th:block>
+
+				<table border="1">
+					<tr>
+						<th>家賃</th>
+						<td>[[*{#numbers.formatInteger(price, 3, 'COMMA')}]]</td>
+						<th>広さ</th>
+						<td>[[*{size}]]畳</td>
+					</tr>
+					<tr>
+						<th>敷金</th>
+						<td>[[*{#numbers.formatInteger(deposit, 3, 'COMMA')}]]</td>
+						<th>礼金</th>
+						<td>[[*{#numbers.formatInteger(keyMoney, 3, 'COMMA')}]]</td>
+					</tr>
+					<tr>
+						<th>状態</th>
+						<td th:if="*{active == 1}">空室</td>
+						<td th:if="*{active == 0}">入居中</td>
+						<th>ID</th>
+						<td>[[*{id}]]</td>
+					</tr>
+					<tr>
+						<th>階</th>
+						<td>[[*{floor}]]階</td>
+						<th>バスルーム</th>
+
+						<td th:if="*{sepToilet == 1}">セパレート</td>
+						<td th:if="*{sepToilet == 0}">ユニットバス</td>
+					</tr>
+					<!-- <tr>
+					<th>向き</th>
+					<td>北西</td>
+					<th>建物種別</th>
+					<td>マンション</td>
+				</tr> -->
+					<tr>
+						<th>ポイント</th>
+						<td colspan="3">[[*{point}]]</td>
+					</tr>
+					<tr>
+						<th>その他</th>
+						<td colspan="3">[[*{other}]]</td>
+					</tr>
+				</table>
+			</th:block>
+		</th:block>
+	</th:block>
+</body>
+
+</html>

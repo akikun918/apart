@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.mapper.ApartMapper">
+
+	<select id="selectAll" resultType="Apart">
+		SELECT *
+		FROM
+		aparts
+	</select>
+
+	<insert id="add">
+		INSERT INTO aparts VALUES(NULL,
+		#{name}, #{station1},
+		#{far1}, #{station2},#{far2}, #{station3},#{far3},
+		#{address1},#{address2}, #{material},
+		#{point},#{other},
+		#{ownerId},#{builtAt}, #{imgName})
+	</insert>
+
+	<select id="selectById" resultType="Apart">
+		SELECT * FROM aparts WHERE
+		aparts.id = #{id}
+	</select>
+
+	<update id="edit">
+		UPDATE aparts SET
+		name = #{name},
+		station1 =
+		#{station1},
+		far1 = #{far1},
+		station2 = #{station2},
+		far2 = #{far2},
+		station3 = #{station3},
+		far3 = #{far3},
+		built_at = #{builtAt},
+		address1 =
+		#{address1},
+		address2 = #{address2},
+		material = #{material},
+		point =
+		#{point},
+		other = #{other},
+		owner_id = #{ownerId},
+		img_name = #{imgName}
+		WHERE id = #{id}
+	</update>
+
+
+	<insert id="roomAdd">
+		INSERT INTO rooms VALUES(NULL,
+		#{apartId}, #{number},
+		#{active}, #{price}, #{deposit}, #{keyMoney}, #{size},
+		#{floor},
+		#{sepToilet},
+		#{point}, #{other})
+	</insert>
+
+
+	<select id="selectRoomById" resultMap="joinResult">
+		SELECT
+		rooms.id,
+		rooms.apart_id,
+		rooms.number,
+		rooms.active,
+		rooms.price,
+		rooms.deposit,
+		rooms.key_money,
+		rooms.size,
+		rooms.floor,
+		rooms.sepToilet,
+		rooms.point,
+		rooms.other,
+		<!-- ↓domainのRoomImage.javaのフィールド -->
+		room_images.id as
+		room_images_id,
+		room_images.name,
+		room_images.apart_id
+		as
+		room_images_apart_id,
+		room_images.room_id
+		FROM rooms 
+		 <![CDATA[ JOIN room_images ON
+		(rooms.apart_id = room_images.apart_id && rooms.id = room_images.room_id)]]>
+		WHERE rooms.id = #{id}
+	</select>
+
+
+	<resultMap id="joinResult" type="Room" autoMapping="true">
+		<id property="id" column="id" />
+		<collection property="roomImageList" ofType="RoomImage"
+			autoMapping="true">
+			<result property="id" column="room_images_id" />
+			<result property="apartId" column="room_images_apart_id" />
+		</collection>
+	</resultMap>
+
+
+
+	<update id="roomEdit">
+		UPDATE rooms SET
+		apart_id = #{apartId},
+		number =
+		#{number},
+		active = #{active},
+		price = #{price},
+		deposit = #{deposit},
+		key_money = #{keyMoney},
+		size = #{size},
+		floor =
+		#{floor},
+		sepToilet =
+		#{sepToilet},
+		point = #{point},
+		other = #{other}
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="findRoomIdByNumberAndApartId" resultType="Integer">
+		SELECT
+		rooms.id FROM rooms WHERE rooms.apart_id = #{apartId} AND rooms.number
+		= #{number}
+	</select>
+
+
+	<delete id="roomDeleteByNumberAndApartId">
+		DELETE FROM rooms WHERE rooms.apart_id = #{apartId}
+		AND rooms.number = #{number}
+	</delete>
+
+
+</mapper>

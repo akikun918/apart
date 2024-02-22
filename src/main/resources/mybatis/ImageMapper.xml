@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.mapper.ImageMapper">
+
+
+	<select id="selectAll" resultType="Image">
+		SELECT * FROM images
+	</select>
+
+
+	<insert id="add">
+		INSERT INTO room_images VALUES(#{id}, #{name},
+		#{apartId}, #{roomId})
+	</insert>
+
+<!--	<update id="roomNumberEdit">-->
+<!--		UPDATE room_images SET-->
+<!--		room_number = #{number}-->
+<!--		WHERE-->
+<!--		apart_id = #{roomImage.apartId} and room_number =-->
+<!--		#{roomImage.roomNumber}-->
+<!--	</update>-->
+
+
+	<delete id="delete">
+		DELETE FROM room_images WHERE
+		apart_id =
+		#{apartId} and
+		room_id =
+		#{roomId} and name
+		=
+		#{name}
+	</delete>
+
+
+
+
+
+</mapper>

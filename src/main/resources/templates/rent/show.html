@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>a</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+	<div class="container w-75 m-auto">
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+			<div class="container">
+				<h1><a class="navbar-brand" th:href="@{/}">RB HOME'S</a></h1>
+				<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="menu">
+					<ul class="navbar-nav">
+						<li class="nav-item">
+							<a th:href="@{/}" class="nav-link active">Home</a>
+						</li>
+						<li class="nav-item"><a th:href="@{/rent/favorite}" class="nav-link">お気に入り</a>
+						</li>
+						<li class="nav-item"><a th:href="@{/mainta}" class="nav-link">会社</a>
+						</li>
+						<li class="nav-item"><a th:href="@{/auth/register}" class="nav-link">会員登録</a>
+						</li>
+						<li class="nav-item"><a th:href="@{/auth/login}" class="nav-link">ログイン</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container  m-auto">
+			<header class="text-light py-3">
+				<h2 th:if="${session.address1List != null }">
+					<th:block th:each="address1 : ${session.address1List} ">
+						[[*{address1}]]
+					</th:block>区の賃貸
+				</h2>
+				<h2 th:if="${session.stationList != null }">
+					<th:block th:each="station : ${session.stationList }">
+						[[*{station}]]駅
+					</th:block>周辺の賃貸
+				</h2>
+				<p><a th:href="@{/rent}">条件を変える</a></p>
+			</header>
+		</div>
+
+
+
+
+		<div class="container my-4">
+			<main>
+				<div class="row">
+					<div class="col-12">
+
+						<form th:action="@{/rent/filteredShow}" th:object="${all}">
+
+							<input type="hidden" name="pressForm" value="1234">
+
+							<fieldset>
+								<legend>
+									物件の条件
+								</legend>
+								<fieldset>
+									<legend>
+										賃料
+									</legend>
+
+
+									<select th:field="*{apartFilter.rentB}">
+										<option th:value="0">下限なし</option>
+										<option th:value="30000">3.0万円</option>
+										<option th:value="35000">3.5万円</option>
+										<option th:value="40000">4.0万円</option>
+										<option th:value="45000">4.5万円</option>
+										<option th:value="50000">5.0万円</option>
+										<option th:value="55000">5.5万円</option>
+										<option th:value="60000">6.0万円</option>
+										<option th:value="65000">6.5万円</option>
+										<option th:value="70000">7.0万円</option>
+										<option th:value="75000">7.5万円</option>
+										<option th:value="80000">8.0万円</option>
+										<option th:value="85000">8.5万円</option>
+										<option th:value="90000">9.0万円</option>
+										<option th:value="95000">9.5万円</option>
+										<option th:value="100000">10万円</option>
+										<option th:value="110000">11万円</option>
+										<option th:value="120000">12万円</option>
+										<option th:value="130000">13万円</option>
+										<option th:value="140000">14万円</option>
+										<option th:value="150000">15万円</option>
+										<option th:value="160000">16万円</option>
+										<option th:value="170000">17万円</option>
+										<option th:value="180000">18万円</option>
+										<option th:value="190000">19万円</option>
+										<option th:value="200000">20万円</option>
+									</select> ～ <select th:field="*{apartFilter.rentT}">
+										<option th:value="9999999">上限なし</option>
+										<option th:value="30000">3.0万円</option>
+										<option th:value="35000">3.5万円</option>
+										<option th:value="400000">4.0万円</option>
+										<option th:value="45000">4.5万円</option>
+										<option th:value="500000">5.0万円</option>
+										<option th:value="55000">5.5万円</option>
+										<option th:value="60000">6.0万円</option>
+										<option th:value="65000">6.5万円</option>
+										<option th:value="70000">7.0万円</option>
+										<option th:value="75000">7.5万円</option>
+										<option th:value="80000">8.0万円</option>
+										<option th:value="85000">8.5万円</option>
+										<option th:value="90000">9.0万円</option>
+										<option th:value="95000">9.5万円</option>
+										<option th:value="100000">10万円</option>
+										<option th:value="110000">11万円</option>
+										<option th:value="120000">12万円</option>
+										<option th:value="130000">13万円</option>
+										<option th:value="140000">14万円</option>
+										<option th:value="150000">15万円</option>
+										<option th:value="160000">16万円</option>
+										<option th:value="170000">17万円</option>
+										<option th:value="180000">18万円</option>
+										<option th:value="190000">19万円</option>
+										<option th:value="200000">20万円</option>
+									</select>
+
+
+
+
+
+									<ul class="checkList">
+										<!--						<li><label><input type="checkbox" name="deposit" value="0" />礼金なし</label></li>-->
+										<li><label><input type="checkbox" th:field="*{apartFilter.deposit}"
+													th:value="0" />礼金なし</label>
+										</li>
+										<!--						<li><label><input type="checkbox" name="keyMoney" value="0" />敷金なし</label></li>-->
+										<li><label><input type="checkbox" th:field="*{apartFilter.keyMoney}"
+													th:value="0" />敷金なし</label>
+										</li>
+									</ul>
+								</fieldset>
+								<fieldset>
+									<legend>
+										広さ
+									</legend>
+
+
+									<select th:field="*{apartFilter.sizeB}">
+
+
+
+										<option th:value="0">下限なし</option>
+										<option th:value="5">5畳</option>
+										<option th:value="6">6畳</option>
+										<option th:value="7">7畳</option>
+										<option th:value="8">8畳</option>
+										<option th:value="9">9畳</option>
+										<option th:value="10">10畳</option>
+										<option th:value="11">11畳</option>
+										<option th:value="12">12畳</option>
+										<option th:value="13">13畳</option>
+										<option th:value="14">14畳</option>
+										<option th:value="15">15畳</option>
+									</select> ～ <select th:field="*{apartFilter.sizeT}">
+										<option th:value="99">上限なし</option>
+										<option th:value="5">5畳</option>
+										<option th:value="6">6畳</option>
+										<option th:value="7">7畳</option>
+										<option th:value="8">8畳</option>
+										<option th:value="9">9畳</option>
+										<option th:value="10">10畳</option>
+										<option th:value="11">11畳</option>
+										<option th:value="12">12畳</option>
+										<option th:value="13">13畳</option>
+										<option th:value="14">14畳</option>
+										<option th:value="15">15畳</option>
+										<option th:value="16">16畳</option>
+										<option th:value="17">17畳</option>
+									</select>
+
+								</fieldset>
+
+								<!-- 		<fieldset id="prg-madoriChoice">
+					<legend>
+						<span>間取り</span>
+					</legend>
+
+					<ul class="checkList multi">
+						<li><label><input type="checkbox" id="cond_madori_11"
+								name="cond[madori][11]" value="11" />ワンルーム</label></li>
+						<li><label><input type="checkbox" id="cond_madori_12"
+								name="cond[madori][12]" value="12" />1K</label></li>
+						<li><label><input type="checkbox" id="cond_madori_13"
+								name="cond[madori][13]" value="13" />1DK</label></li>
+						<li><label><input type="checkbox" id="cond_madori_15"
+								name="cond[madori][15]" value="15" />1LDK</label></li>
+						<li><label><input type="checkbox" id="cond_madori_22"
+								name="cond[madori][22]" value="22" />2K</label></li>
+						<li><label><input type="checkbox" id="cond_madori_23"
+								name="cond[madori][23]" value="23" />2DK</label></li>
+						<li><label><input type="checkbox" id="cond_madori_25"
+								name="cond[madori][25]" value="25" />2LDK</label></li>
+						<li><label><input type="checkbox" id="cond_madori_32"
+								name="cond[madori][32]" value="32" />3K</label></li>
+						<li><label><input type="checkbox" id="cond_madori_33"
+								name="cond[madori][33]" value="33" />3DK</label></li>
+						<li><label><input type="checkbox" id="cond_madori_35"
+								name="cond[madori][35]" value="35" />3LDK</label></li>
+						<li><label><input type="checkbox" id="cond_madori_42"
+								name="cond[madori][42]" value="42" />4K</label></li>
+						<li><label><input type="checkbox" id="cond_madori_43"
+								name="cond[madori][43]" value="43" />4DK</label></li>
+						<li><label><input type="checkbox"
+								id="cond_madori_45-" name="cond[madori][45-]" value="45-" />4LDK以上</label></li>
+					</ul>
+				</fieldset>
+ -->
+
+								<fieldset>
+									<legend>
+										駅徒歩分
+									</legend>
+
+
+									<span><select th:field="*{apart.far1}">
+											<option th:value="100" class="selected" selected="selected">指定なし</option>
+											<option th:value="1">1分以内</option>
+											<option th:value="5">5分以内</option>
+											<option th:value="7">7分以内</option>
+											<option th:value="10">10分以内</option>
+											<option th:value="15">15分以内</option>
+											<option th:value="20">20分以内</option>
+										</select>
+
+
+										<!-- 				<p class="checkList option">
+						<label for="cond_bustime"><input type="checkbox"
+							id="cond_bustime" name="cond[bustime]" value="1" />バス乗車時間含む</label>
+					</p> -->
+								</fieldset>
+
+								<!-- 		<fieldset id="prg-transitField" class="prg-transitSelect">
+					<legend>
+						<span>通勤・通学駅までの所要時間</span>
+					</legend>
+					<p class="changeTransit">
+						<a href="javascript:void(0);" id="transit-set-change"
+							role="button" data-controller="button"
+							data-action="keydown->button#keyboardClick">通勤・通学時間の設定</a>
+					</p>
+				</fieldset> -->
+
+								<!-- 		<fieldset id="prg-chikunenSelect">
+					<legend>
+						<span>築年数</span>
+					</legend>
+
+					<div class="selectList wide">
+						<span><select id="cond_houseageh" name="cond[houseageh]"><option
+									value="0" class="selected" selected="selected">指定なし</option>
+								<option value="1">新築</option>
+								<option value="3">3年以内</option>
+								<option value="5">5年以内</option>
+								<option value="10">10年以内</option>
+								<option value="15">15年以内</option>
+								<option value="20">20年以内</option>
+								<option value="25">25年以内</option>
+								<option value="30">30年以内</option></select></span>
+					</div>
+				</fieldset> -->
+
+								<fieldset>
+									<legend>
+										建物構造
+									</legend>
+									<ul>
+										<li><label><input type="checkbox" th:field="*{apartFilter.materialList}"
+													th:value="鉄筋" />鉄筋系</label></li>
+										<li><label><input type="checkbox" th:field="*{apartFilter.materialList}"
+													th:value="木造" />木造系</label></li>
+										<li><label><input type="checkbox" th:field="*{apartFilter.materialList}"
+													th:value="ブロック" />ブロック系</label></li>
+
+										<!-- <li><label><input type="checkbox"
+								id="cond_housekouzougroup_blockother"
+								name="cond[housekouzougroup][blockother]" value="blockother" />ブロック・その他</label></li> -->
+									</ul>
+								</fieldset>
+								<fieldset>
+									<legend>
+										フリーワード検索
+									</legend>
+									<input type="text" th:field="*{apartFilter.free}" />
+								</fieldset>
+							</fieldset>
+							<input type="submit" />
+						</form>
+					</div><!-- /.col -->
+
+
+
+
+					<th:block th:each="filteredAll : ${filteredAlls}" th:object="${filteredAll}">
+
+						<ul>
+							<li th:each="room : *{roomList}">
+								<!--<img th:each="image : *{imageList}"
+										th:src="@{/uploads/{name}(name=${image.imgName})}" alt="" width="100"
+										height="100" />-->
+								<div class="col-5">
+									<img th:src="@{/uploads/{name}(name=*{image.imgName})}" alt="" width="100"
+										height="100" />
+								</div><!-- /.col -->
+								<div class="col-5">
+									<div>
+										賃貸マンション
+									</div>
+								</div><!-- /.col -->
+								<div class="col-6">
+									<a th:href="@{/rent/detail(id=${room.id})}" target="_blank">[[*{apart.name}]]</a>
+									<ul>
+										<li>[[*{apart.address1}]]</li>
+										<li>
+											<div style="font-weight: bold">
+												[[*{apart.station1}]] 駅
+												徒歩[[*{apart.far1}]]分</div>
+											<div>
+												<th:block th:if="*{apart.station2 != null}">[[*{apart.station2}]]
+													駅 徒歩[[*{apart.far2}]]分 </th:block>
+											</div>
+
+											<div class="cassetteitem_detail-text">
+												<th:block th:if="*{apart.station3 != null}">[[*{apart.station3}]]
+													駅 徒歩[[*{apart.far3}]]分 </th:block>
+											</div>
+										</li>
+										<li>
+											<div>築[[*{old}]]年</div>
+										</li>
+										<li>
+											<div>[[*{apart.point}]]年</div>
+										</li>
+										<li>
+											<div>[[${room.point}]]</div>
+										</li>
+									</ul>
+								</div><!-- /.col -->
+								<div class="col-12">
+									<div>
+										<table border="1">
+											<tr>
+												<!--		<th class="cassetteitem_other-col01">&nbsp;</th>
+								<th class="cassetteitem_other-col02">&nbsp;</th>-->
+												<th>階</th>
+												<th>賃料/管理費</th>
+												<th>敷金/礼金</th>
+												<!-- 								<th class="cassetteitem_other-col06">間取り/専有面積</th>
+ -->
+												<th>広さ</th>
+												<th>&nbsp;</th>
+												<th>お気に入り</th>
+												<th>&nbsp;</th>
+											</tr>
+
+
+
+											<tr class="js-cassette_link">
+												<!--<td
+									class="cassetteitem_other-checkbox cassetteitem_other-checkbox--newarrival js-cassetteitem_checkbox">
+									<input type="checkbox" name="bc" id="bukken_0"
+										class="js-ikkatsuCB js-single_checkbox" value="100362906825"><label
+										for="bc">&nbsp;</label>
+								</td>-->
+												<!--	<td>
+									<div class="casssetteitem_other-thumbnail js-view_gallery_images js-noContextMenu"
+										data-imgs="https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_go.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_co.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_ro.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_4o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_5o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_6o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_8o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_3o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_7o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_9o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_11o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_10o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_1o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_2o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_s1o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_s2o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_s3o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_s5o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_s6o.jpg,https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_s4o.jpg">
+										<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw%3D%3D"
+											rel="https://img01.suumo.com/front/gazo/fr/bukken/825/100362906825/100362906825_co.jpg"
+											alt=""
+											class="casssetteitem_other-thumbnail-img casssetteitem_other-thumbnail-img--hasimages js-view_gallery-modal js-scrollLazy">
+										<span
+											class="cassetteitem_other-thumbnail-expansion js-view_gallery-modal"></span>
+									</div>
+								</td>-->
+												<td>2階</td>
+
+
+												<td>
+													<ul>
+														<li><span
+																class="cassetteitem_price cassetteitem_price--rent"><span
+																	class="cassetteitem_other-emphasis ui-text--bold">[[${#numbers.formatInteger(room.price,
+																	3, 'COMMA')}]]円</span></span>
+														</li>
+														<!--<li><span
+												class="cassetteitem_price cassetteitem_price--administration">15000円</span>
+										</li>-->
+													</ul>
+												</td>
+
+
+												<td>
+													<ul>
+														<li th:if="${room.deposit == 0}"><span
+																class="cassetteitem_price cassetteitem_price--deposit">無料</span>
+														</li>
+														<li th:unless="${room.deposit == 0}"><span
+																class="cassetteitem_price cassetteitem_price--deposit">[[${#numbers.formatInteger(room.deposit,
+																3, 'COMMA')}]]円</span>
+														</li>
+
+														<li th:if="${room.keyMoney == 0}"><span
+																class="cassetteitem_price cassetteitem_price--deposit">無料</span>
+														</li>
+														<li th:unless="${room.keyMoney == 0}"><span
+																class="cassetteitem_price cassetteitem_price--deposit">[[${#numbers.formatInteger(room.keyMoney,
+																3, 'COMMA')}]]円</span>
+														</li>
+
+													</ul>
+												</td>
+												<td>
+													<ul>
+														<li><span class="cassetteitem_madori">[[${room.size}]]畳</span>
+														</li>
+														<!-- 										<li><span class="cassetteitem_menseki">40.78m<sup>2</sup></span></li>
+ -->
+													</ul>
+												</td>
+												<td>
+													<ul class="cassetteitem-taglist">
+													</ul>
+												</td>
+												<td>
+													<a href="javascript:void(0);">
+														追加
+													</a>
+												</td>
+												<td>
+													<!--			<a href="/chintai/jnc_000087204540/?bc=100362906825" target="_blank"
+										class="js-cassette_link_href cassetteitem_other-linktext"
+										onclick="sendBeaconSiteCatalystClick(event,this,'click_casset_bkn_link',false);">詳細を見る</a>-->
+
+													<a th:href="@{/rent/detail(id=${room.id})}">詳細を見る</a>
+													<!-- 			<a th:href="@{/rent/detail/{id}(id=*{id})}">詳細を見る</a> -->
+													<p>
+														<a href="@{/rent/inquiry(id=${room.id})}">お問い合わせ</a>
+													</p> <!--	<button
+										type="button" class="js-kobetsuShiryoSeikyu cassetteitem_other-inquiry_button">
+										お問い合わせ
+										<span class="cassetteitem_other-inquiry_text">(無料)</span>
+									</button>-->
+												</td>
+											</tr>
+
+
+										</table>
+									</div>
+								</div><!-- /.col -->
+							</li>
+						</ul>
+
+					</th:block>
+
+
+					<div class="col-12">
+						<div th:if="${session.keySet().contains('address1List')  }">
+							<div th:unless="${session.keySet().contains('apart') }">
+
+								<div th:if="${totalPage >= 2}">
+									<ul>
+										<!-- 前のページリンク -->
+										<th:block th:switch="${page}">
+											<li th:case="1"><a href="" class="noevent">前ページ</a></li>
+
+											<li th:case="*"><a th:href="@{/rent/areaShow(page=${page-1})}">前ページ</a></li>
+
+										</th:block>
+
+										<!-- ページ番号 -->
+										<th:block th:each="index : ${#numbers.sequence(1, totalPage)}">
+											<th:block th:switch="${index}">
+												<li th:case="${page}"><a href="" class="noevent">[[${index}]]</a></li>
+												<li th:case="*"><a
+														th:href="@{/rent/areaShow(page=${index})}">[[${index}]]</a>
+												</li>
+											</th:block>
+										</th:block>
+
+										<!-- 次のページリンク -->
+										<th:block th:switch="${page}">
+											<li th:case="${totalPage}"><a href="" class="noevent">次ページ</a></li>
+											<li th:case="*"><a th:href="@{/rent/areaShow(page=${page+1})}">次ページ</a></li>
+										</th:block>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<div th:if="${session.keySet().contains('stationList') }">
+							<div th:unless="${session.keySet().contains('apart') }">
+								<div th:if="${totalPage >= 2}">
+									<ul>
+										<!-- 前のページリンク -->
+										<th:block th:switch="${page}">
+											<li th:case="1"><a href="" class="noevent">前ページ</a></li>
+
+											<li th:case="*"><a th:href="@{/rent/stationShow(page=${page-1})}">前ページ</a>
+											</li>
+
+										</th:block>
+
+										<!-- ページ番号 -->
+										<th:block th:each="index : ${#numbers.sequence(1, totalPage)}">
+											<th:block th:switch="${index}">
+												<li th:case="${page}"><a href="" class="noevent">[[${index}]]</a></li>
+												<li th:case="*"><a
+														th:href="@{/rent/stationShow(page=${index})}">[[${index}]]</a>
+												</li>
+											</th:block>
+										</th:block>
+
+										<!-- 次のページリンク -->
+										<th:block th:switch="${page}">
+											<li th:case="${totalPage}"><a href="" class="noevent">次ページ</a></li>
+											<li th:case="*"><a th:href="@{/rent/stationShow(page=${page+1})}">次ページ</a>
+											</li>
+										</th:block>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div th:if="${session.keySet().contains('apart')  }">
+							<div th:if="${totalPage >= 2}">
+								<ul>
+									<!-- 前のページリンク -->
+									<th:block th:switch="${page}">
+										<li th:case="1"><a href="" class="noevent">前ページ</a></li>
+										<li th:case="*"><a th:href="@{/rent/filteredShow(page=${page-1})}">前ページ</a></li>
+									</th:block>
+
+									<!-- ページ番号 -->
+									<th:block th:each="index : ${#numbers.sequence(1, totalPage)}">
+										<th:block th:switch="${index}">
+											<li th:case="${page}"><a href="" class="noevent">[[${index}]]</a></li>
+											<li th:case="*"><a
+													th:href="@{/rent/filteredShow(page=${index})}">[[${index}]]</a>
+											</li>
+										</th:block>
+									</th:block>
+									<!-- 次のページリンク -->
+									<th:block th:switch="${page}">
+										<li th:case="${totalPage}"><a href="" class="noevent">次ページ</a></li>
+										<li th:case="*"><a th:href="@{/rent/filteredShow(page=${page+1})}">次ページ</a></li>
+									</th:block>
+								</ul>
+							</div>
+						</div>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</main>
+		</div><!-- /.container -->
+		<div class="container-fluid bg-dark text-light text-center pt-4 pb-2">
+			<footer th:replace="~{parts/common :: page_footer}"></footer>
+		</div><!-- /.container my-4" -->
+	</div><!-- /.container w-75 m-auto" -->
+	<script src="../js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
