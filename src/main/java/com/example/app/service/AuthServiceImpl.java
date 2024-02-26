@@ -28,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
 			return false;
 		}
 
-		//		 パスワードが正しいかチェック
+		// パスワードが正しいかチェック
 		if (!BCrypt.checkpw(loginPass, auth.getLoginPass())) {
 			return false;
 		}
@@ -43,11 +43,13 @@ public class AuthServiceImpl implements AuthService {
 
 		String hashed = BCrypt.hashpw(auth.getLoginPass(), BCrypt.gensalt());
 		auth.setLoginPass(hashed);
+		// auth.setFRoomId1(0)にしておかないと、お気に入りページをひらいたときにエラーが出る
 		auth.setFRoomId1(0);
 
 		try {
 			authMapper.register(auth);
 		} catch (Exception e) {
+			System.out.println("同じID");
 			e.printStackTrace();
 			return false;
 		}

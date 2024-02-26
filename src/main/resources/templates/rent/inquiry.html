@@ -5,8 +5,8 @@
 	<meta charset="UTF-8">
 	<title>a</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="../css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="../css/style.css">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
@@ -59,7 +59,7 @@
 										<td><strong>必須</strong></td>
 										<td><input th:field="*{name}" type="text" maxlength="15"
 												style="ime-mode: active;" class="validate[required]" /></td>
-										<td th:errors="*{name}"></td>
+										<td class="error" th:errors="*{name}"></td>
 									</tr>
 									<tr>
 										<th>E-mail</th>
@@ -67,14 +67,14 @@
 										<td><input th:field="*{mail}" type="text" maxlength="100"
 												style="ime-mode: disabled;" class="validate[required,custom[email]]" />
 										</td>
-										<td th:errors="*{mail}"></td>
+										<td class="error"  th:errors="*{mail}"></td>
 									</tr>
 									<tr>
 										<th>電話番号</th>
 										<td><strong>必須</strong></td>
 										<td><input th:field="*{tel}" type="number" maxlength="30"
 												style="ime-mode: disabled;" class="validate[custom[phone]]" /></td>
-										<td th:errors="*{tel}"></td>
+										<td  class="error" th:errors="*{tel}"></td>
 									</tr>
 
 									<!--<tr>
@@ -111,7 +111,7 @@
 										<td><strong>必須</strong></td>
 										<td><em>※質問事項、希望などをご記入ください</em> <br /> <textarea th:field="*{detail}" rows="4"
 												cols="25"></textarea></td>
-										<td th:errors="*{detail}"></td>
+										<td class="error"  th:errors="*{detail}"></td>
 
 									</tr>
 
@@ -144,9 +144,9 @@
 	<!-- /.container  -->
 
 
-	<script src="../js/bootstrap.bundle.min.js"></script>
-
-
+	<script src="@{/js/bootstrap.bundle.min.js}"></script>
+<!--	下のscriptを使うのに必要
+-->	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script>
 		$(document).ready(function () {
 			const origin = $('#stage img').attr('src');
@@ -156,7 +156,7 @@
 			});
 			var btn = document.getElementById('btn');
 			btn.addEventListener('click', function () {
-				alert("お気に入りは10件まで登録できます。10件を超えると古い順から削除されます。");
+				alert("以下の情報で送信します");
 				//submit()でフォームの内容を送信
 				document.myform.submit();
 			})

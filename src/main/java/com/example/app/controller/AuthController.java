@@ -33,20 +33,18 @@ public class AuthController {
 	}
 
 	@PostMapping("/register")
-	public String register(Model model, Auth auth) throws Exception {
-		// すでに登録されているIDかブランクの場合発動{}の中が実行される
-		if (!authService.register(auth)) {
-			model.addAttribute("error", "別のIDとパスワードを試してください");
+	public String register(Model model, @Valid Auth auth, Errors errors) throws Exception {
+		// 下のauthService.register(auth)は必ず実行される
+		if (!authService.register(auth) || errors.hasErrors()) {
+			if (!authService.register(auth)) {
+				//hasErrors()のloginIdのエラーに追加される
+				errors.rejectValue("loginId", "authSameId");
+			}
 			return "auth/register";
 		}
 
 		session.setAttribute("loginId", auth.getLoginId());
-		// session.setAttribute("admin", admin);
-		// session.setAttribute("loginId", loginId);
-		//
-		// // 登録したアカウント専用のテーブルを作成
-		// adminDao.createData(loginId);
-		// adminDao.load(loginId);
+
 		model.addAttribute("title", "会員登録完了");
 		return "auth/authDone";
 
@@ -67,17 +65,22 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public String login(Model model, @Valid Auth auth, Errors errors) throws Exception {
-		// 入力に不備がある
-		if (errors.hasErrors()) {
+		// !authService.isCorrectIdAndPassword(auth)は必ず実行される
+		if (!authService.isCorrectIdAndPassword(auth.getLoginId(), auth.getLoginPass()) || errors.hasErrors()) {
+			// パスワードが正しくない
+			if (!authService.isCorrectIdAndPassword(auth.getLoginId(), auth.getLoginPass())) {
+				//hasErrors()のloginIdのエラーに追加される
+				errors.rejectValue("loginId", "error.incorrect_id_password");
+			}
 			model.addAttribute("title", "ログイン");
 			return "auth/login";
 		}
-		// パスワードが正しくない
-		if (!authService.isCorrectIdAndPassword(auth.getLoginId(), auth.getLoginPass())) {
-			errors.rejectValue("loginId", "error.incorrect_id_password");
-			model.addAttribute("title", "ログイン");
-			return "auth/login";
-		}
+//		// パスワードが正しくない
+//		if (!authService.isCorrectIdAndPassword(auth)) {
+//			errors.rejectValue("loginId", "error.incorrect_id_password");
+//			model.addAttribute("title", "ログイン");
+//			return "auth/login";
+//		}
 		// 正しいログインIDとパスワード
 		// ⇒ セッションにログインIDを格納し、リダイレクト
 		session.setAttribute("loginId", auth.getLoginId());

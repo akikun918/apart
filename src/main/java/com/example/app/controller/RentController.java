@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +19,9 @@ import com.example.app.domain.Inquiry;
 import com.example.app.mapper.AllMapper;
 import com.example.app.service.AllService;
 import com.example.app.service.AuthService;
+import com.example.app.validation.InquiryGroup;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -226,8 +228,12 @@ public class RentController {
 	@PostMapping("/inquiry")
 	public String inquiry(RedirectAttributes ra, All all, @RequestParam(name = "name", required = false) String name,
 			Model model,
-			@Valid Inquiry inquiry, Errors errors) {
+			@Validated(InquiryGroup.class) Inquiry inquiry, Errors errors) {
 		if (errors.hasErrors()) {
+			List<ObjectError> objList = errors.getAllErrors();
+			for(ObjectError obj : objList) {
+			System.out.println(obj.toString());
+			}
 			// エラーがあったときの処理
 			all = allMapper.selectByApartId(all.getApart().getId());
 			model.addAttribute("all", all);
@@ -253,13 +259,10 @@ public class RentController {
 	}
 
 	@GetMapping("/favoriteShow")
-	public String favoriteShow(Model model) throws Exception {
+	public String favoriteShow(RedirectAttributes ra, Model model) throws Exception {
 		if (session.getAttribute("loginId") == null) {
-
-			model.addAttribute("fav", "ログインしてください");
-			model.addAttribute("title", "ログイン");
-			model.addAttribute("auth", new Auth());
-			return "auth/login";
+			ra.addFlashAttribute("fav", "ログインしてください");
+			return "redirect:/auth/login";
 		}
 
 		String loginId = (String) session.getAttribute("loginId");

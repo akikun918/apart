@@ -3,37 +3,57 @@
 
 <head>
 	<meta charset="UTF-8">
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
 	<title>オーナー一覧・新規登録・編集</title>
 </head>
 
 <body>
 
-	<p><a th:href="@{/admin/menu}">メニューへ</a></p>
 
-	<h1>オーナー一覧・新規登録・編集</h1>
-	<h2>
-		<a th:href="@{/admin/ownerAdd}"> 新規登録 </a>
-	</h2>
+	<div class="container">
 
-	<h2>一覧・編集</h2>
-	<table border="1">
-		<tr>
-			<th>名前</th>
-			<th>ID</th>
-			<th>お誕生日（生年月日）</th>
-			<th>オーナーへの仲介手数料</th>
-			<th>客先仲介手数料</th>
-			<th></th>
-		</tr>
-		<tr th:each="owner : ${owners}" th:object="${owner}">
-			<td>[[*{name}]]</td>
-			<td>[[*{id}]]</td>
-			<td>[[*{birthday}]]</td>
-			<td>[[*{ownerBrokerageFee}]]</td>
-			<td>[[*{customerBrokerageFee}]]</td>
-			<td><a th:href="@{/admin/ownerEdit(id=*{id})}">編集</a></td>
-		</tr>
-	</table>
+		<h1 class="mt-4">オーナー一覧・新規登録・編集</h1>
+		<div th:if="${statusMessage}" class="alert alert-success mt-4">
+			[[${statusMessage}]]
+		</div>
+
+		<p><a th:href="@{/adminHome}">メニューへ</a></p>
+		<p>
+			<a class="mt-4 btn btn-primary" th:href="@{/admin/ownerAdd}">新規登録</a>
+			<!--	<a class="mt-4 ml-4 btn btn-secondary" th:href="@{/logout}">ログアウト
+			</a>-->
+		</p>
+		<table class="table">
+			<tr>
+				<th>名前</th>
+				<th>ID</th>
+				<th>お誕生日（生年月日）</th>
+				<th>オーナーへの仲介手数料</th>
+				<th>客先仲介手数料</th>
+				<th>登録日</th>
+				<th></th>
+			</tr>
+			<tr th:each="owner : ${owners}" th:object="${owner}">
+				<td>[[*{name}]]</td>
+				<td>[[*{id}]]</td>
+				<td>[[*{birthday}]]</td>
+				<td>[[*{ownerBrokerageFee}]]</td>
+				<td>[[*{customerBrokerageFee}]]</td>
+				<td>[[*{#temporals.format(created,
+					'yyyy年MM月dd日 HH:mm:ss')}]]</td>
+				<td><a class="btn btn-primary" th:href="@{/admin/ownerEdit(id=*{id})}">編集
+					</a></td>
+				<!--<td><button class="btn btn-danger delete" th:data-href="@{/members/delete/{id}(id=${member.id})}"
+						th:data-name="${member.name}" data-bs-toggle="modal" data-bs-target="#confirm-modal">削除</button>
+				</td>-->
+			</tr>
+		</table>
+	</div>
+
+	<script src="../js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 
 </html>

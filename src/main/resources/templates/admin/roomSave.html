@@ -2,195 +2,175 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<meta charset="UTF-8">
-<title>[[${title}]]</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<title>[[${title}]]</title>
+	<style>
+		tbody,
+		td,
+		tfoot,
+		th,
+		thead,
+		tr {
+			border-width: 1q;
+		}
+	</style>
 </head>
 
 <body>
-	<!-- <th:block th:object="${player}">
-		<p th:errors="*{name}"></p>
-		<p th:errors="*{position}"></p>
-		<p th:errors="*{birthday}"></p>
-	</th:block> -->
-	<p>
-		<a th:href="@{/admin/menu}">メニューへ</a>
-	</p>
-	<p>
-		<a th:href="@{/admin/apartList}">アパート一覧へ</a>
-	</p>
-	<p>
-		<a th:href="@{/admin/roomList(id=${all.apart.id})}">[[*{all.apart.name}]]の部屋一覧へ</a>
-	</p>
-	
-	<h1>[[${title}]]</h1>
+	<div class="container">
+		<p class="mt-4">
+			<a th:href="@{/adminHome}">メニューへ</a>　
+			<a th:href="@{/admin/apartList}">アパート一覧へ</a>　
+			<a th:href="@{/admin/roomList(id=${room.apartId})}">部屋一覧へ</a>
+		</p>
 
+		<h1 class="my-4">[[${title}]]</h1>
 
-	<th:block th:if="${room.price == null}">
-		<form th:action="@{/admin/roomAdd}" method="post"
-			enctype="multipart/form-data">
-	</th:block>
-	<th:block th:if="${room.price != null}">
-		<form th:action="@{/admin/roomEdit}" method="post"
-			enctype="multipart/form-data">
-	</th:block>
-
-	<th:block th:object="${room}">
-		<input type="hidden" th:field="*{apartId}">
-		<th:block th:if="*{id != null}">
-			<input type="hidden" th:field="*{id}">
+		<th:block th:if="${room.id == null}">
+			<form th:action="@{/admin/roomAdd}" method="post" enctype="multipart/form-data">
 		</th:block>
-		<h3>
-			<input type="text" th:field="*{number}" />号室
-		</h3>
-		<p th:if="*{roomImageList != null }">
+		<th:block th:if="${room.id != null}">
+			<form th:action="@{/admin/roomEdit}" method="post" enctype="multipart/form-data">
+		</th:block>
 
-			<input type="hidden" name="roomImageListSize"
-				th:value="${roomImageListSize}">
+		<th:block th:object="${room}">
+			<input type="hidden" th:field="*{apartId}">
+			<input type="hidden" th:field="*{id}">
+			<span class="error" th:errors="*{number}"></span>
 
-			<th:block th:each="roomImage : *{roomImageList}"
-				th:object="${roomImage}">
-				<img th:src="@{/uploads/{name}(name=*{name})}" alt="" width="120"
-					height="120" />
-				<label><input type="checkbox" name="deleteImgNameList"
-					th:value="*{name}" />削除</label>
-
+			<th:block th:if="${all}">
+				<h2 class="my-4">[[${all.apart.name}]]</h2>
 			</th:block>
-		</p>
 
-		<p th:if="${noPicture != null}">
-			<font color="#ff4500">[[${noPicture}]] </font>
-		</p>
+			<p>
+				<input type="number" th:field="*{number}" />号室
+			</p>
+			<p th:if="*{roomImageList != null }">
 
-		<p>
-			ルーム画像：<input type="file" name="upload" />
-		</p>
+				<th:block th:each="roomImage : *{roomImageList}" th:object="${roomImage}">
+					<img th:src="@{/uploads/{name}(name=*{name})}" alt="" width="120" height="120" />
+					<label><input type="checkbox" name="deleteImgNameList" th:value="*{name}" />削除</label>
+				</th:block>
+			</p>
 
-		<table border="1">
-			<tr>
-				<th>家賃</th>
-				<td><input type="text" th:field="*{price}" /></td>
-				<th>広さ</th>
-				<td><input type="text" th:field="*{size}" />畳</td>
-			</tr>
-			<tr>
-				<th>敷金</th>
-				<td><input type="text" th:field="*{deposit}" /></td>
-				<th>礼金</th>
-				<td><input type="text" th:field="*{keyMoney}" /></td>
-			</tr>
+			<p class="error" th:each="error : ${#fields.globalErrors()}" th:text="${error}"></p>
+			<p>
+				ルーム画像：<input type="file" name="upload" />
+			</p>
 
-
-
-			<tr>
-				<th>状態</th>
-				<td><label><input type="radio" th:field="*{active}"
-						value="0">入居中</label> <label><input type="radio"
-						th:field="*{active}" value="1">空室</label></td>
-			</tr>
-			<!--/* 	<tr>
-	<!--/* 			<th>状態</th>
-				<td><select th:field="*{active}">
-						<option th:value="0">入居中</option>
-						<option th:value="1">空室</option>
-				</select></td> */-->
-			<!--* 		<th>ID</th>
-				<td>[[*{id}]]</td> 
-			</tr>
-			*-->
-			<tr>
-				<th>階</th>
-				<td><input type="number" th:field="*{floor}" min="1" max="30" />階</td>
-
-				<th>バスルーム</th>
-				<td><label><input type="radio" th:field="*{sepToilet}"
-						value="0">ユニットバス</label> <label><input type="radio"
-						th:field="*{sepToilet}" value="1">セパレート</label></td>
-			</tr>
-			<!--* 	
+			<table border="1">
+				<tr>
+					<th>家賃</th>
+					<p class="error" th:errors="*{price}"></p>
+					<td><input type="number" th:field="*{price}" /></td>
+					<th>広さ</th>
+					<p class="error" th:errors="*{size}"></p>
+					<td><input type="number" th:field="*{size}" />畳</td>
+				</tr>
+				<tr>
+					<th>敷金</th>
+					<p class="error" th:errors="*{deposit}"></p>
+					<td><input type="number" th:field="*{deposit}" /></td>
+					<th>礼金</th>
+					<p class="error" th:errors="*{keyMoney}"></p>
+					<td><input type="number" th:field="*{keyMoney}" /></td>
+				</tr>
+				<tr>
+					<th>状態</th>
+					<td><label><input type="radio" th:field="*{active}" value="0">入居中</label> <label><input type="radio"
+								th:field="*{active}" value="1">空室</label></td>
+				</tr>
+				<tr>
+					<th>階</th>
+					<p class="error" th:errors="*{floor}"></p>
+					<td><input type="number" th:field="*{floor}" min="1" max="30" />階</td>
+					<th>バスルーム</th>
+					<td><label><input type="radio" th:field="*{sepToilet}" value="0">ユニットバス</label> <label><input
+								type="radio" th:field="*{sepToilet}" value="1">セパレート</label></td>
+				</tr>
+				<!--* 	
 
 				<td><select th:field="*{active}">
 						<option th:value="0">ユニットバス</option>
 						<option th:value="1">セパレート</option>
 				</select></td>
 			</tr> *-->
-			<tr>
-				<th>ポイント</th>
-				<td colspan="3"><input type="text" th:field="*{point}" /></td>
+				<tr>
+					<th>ポイント</th>
+					<p class="error" th:errors="*{point}"></p>
+					<td colspan="3"><input type="text" th:field="*{point}" /></td>
 
+				</tr>
+				<tr>
+					<th>その他</th>
+					<p class="error" th:errors="*{other}"></p>
+					<td colspan="3"><input type="text" th:field="*{other}" /></td>
+				</tr>
+			</table>
 
-			</tr>
-			<tr>
-				<th>その他</th>
-				<td colspan="3"><input type="text" th:field="*{other}" /></td>
-			</tr>
-		</table>
+		</th:block>
+		<input class="btn btn-primary" type="submit" value="登録">
+		</form>
 
+		<th:block th:if="${all != null}">
+			<h2 class="my-4">登録済みお部屋一覧</h2>
 
+			<th:block th:object="${all}">
 
-	</th:block>
-	<input type="submit" />
-	</form>
+				<th:block th:each="room : *{roomList}" th:object="${room}">
+					<h3 class="my-4">[[*{number}]]号室</h3>
+					<th:block th:each="roomImage : *{roomImageList}" th:object="${roomImage}">
+						<img th:src="@{/uploads/{name}(name=*{name})}" alt="" width="120" height="120" />
+					</th:block>
+					<table border="1">
+						<tr>
+							<th>家賃</th>
+							<td>[[*{price}]]</td>
+							<th>広さ</th>
+							<td>[[*{size}]]畳</td>
+						</tr>
+						<tr>
+							<th>敷金</th>
+							<td>[[*{deposit}]]</td>
+							<th>礼金</th>
+							<td>[[*{keyMoney}]]</td>
+						</tr>
+						<tr>
+							<th>状態</th>
+							<td th:if="*{active == 1}">空室</td>
+							<td th:if="*{active == 0}">入居中</td>
+							<th>ID</th>
+							<td>[[*{id}]]</td>
+						</tr>
+						<tr>
+							<th>階</th>
+							<td>[[*{floor}]]階</td>
+							<th>バスルーム</th>
 
-
-	<th:block th:if="${all != null}">
-		<h2>登録済みお部屋</h2>
-		<h3>[[${all.apart.name}]]</h3>
-
-		<th:block th:object="${all}">
-
-			<th:block th:each="room : *{roomList}" th:object="${room}">
-				<h3>[[*{number}]]号室</h3>
-				<th:block th:each="roomImage : *{roomImageList}"
-					th:object="${roomImage}">
-					<img th:src="@{/uploads/{name}(name=*{name})}" alt="" width="120"
-						height="120" />
-				</th:block>
-				<table border="1">
-					<tr>
-						<th>家賃</th>
-						<td>[[*{price}]]</td>
-						<th>広さ</th>
-						<td>[[*{size}]]畳</td>
-					</tr>
-					<tr>
-						<th>敷金</th>
-						<td>[[*{deposit}]]</td>
-						<th>礼金</th>
-						<td>[[*{keyMoney}]]</td>
-					</tr>
-					<tr>
-						<th>状態</th>
-						<td th:if="*{active == 1}">空室</td>
-						<td th:if="*{active == 0}">入居中</td>
-						<th>ID</th>
-						<td>[[*{id}]]</td>
-					</tr>
-					<tr>
-						<th>階</th>
-						<td>[[*{floor}]]階</td>
-						<th>バスルーム</th>
-
-						<td th:if="*{sepToilet == 1}">セパレート</td>
-						<td th:if="*{sepToilet == 0}">ユニットバス</td>
-					</tr>
-					<!-- <tr>
+							<td th:if="*{sepToilet == 1}">セパレート</td>
+							<td th:if="*{sepToilet == 0}">ユニットバス</td>
+						</tr>
+						<!-- <tr>
 					<th>向き</th>
 					<td>北西</td>
 					<th>建物種別</th>
 					<td>マンション</td>
 				</tr> -->
-					<tr>
-						<th>ポイント</th>
-						<td colspan="3">[[*{point}]]</td>
-					</tr>
-					<tr>
-						<th>その他</th>
-						<td colspan="3">[[*{other}]]</td>
-					</tr>
-				</table>
+						<tr>
+							<th>ポイント</th>
+							<td colspan="3">[[*{point}]]</td>
+						</tr>
+						<tr>
+							<th>その他</th>
+							<td colspan="3">[[*{other}]]</td>
+						</tr>
+					</table>
+				</th:block>
 			</th:block>
 		</th:block>
-	</th:block>
+	</div>
 </body>
 
 </html>

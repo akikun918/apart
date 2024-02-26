@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,12 @@ import com.example.app.mapper.AllMapper;
 import com.example.app.mapper.ApartMapper;
 import com.example.app.mapper.ImageMapper;
 import com.example.app.mapper.OwnerMapper;
+import com.example.app.service.AdminService;
+import com.example.app.service.RoomImageService;
+import com.example.app.validation.ApartAddGroup;
+import com.example.app.validation.ApartEditGroup;
+import com.example.app.validation.OwnerSaveGroup;
+import com.example.app.validation.RoomSaveGroup;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +44,15 @@ public class AdminController {
 	private final OwnerMapper ownerMapper;
 	private final ApartMapper apartMapper;
 	private final ImageMapper imageMapper;
+	private final RoomImageService roomImageService;
+	private final AdminService adminService;
 	private final HttpSession session;
 
-	@GetMapping("/menu")
-	public String menu(Model model) {
-
-		return "admin/menu";
-	}
+//	@GetMapping("/menu")
+//	public String menu(Model model) {
+//
+//		return "admin/menu";
+//	}
 
 	////////////////////// オーナー編集//////////////////////////////////
 	@GetMapping("/ownerList")
@@ -63,16 +74,21 @@ public class AdminController {
 	}
 
 	@PostMapping("/ownerAdd")
-	public String add(
-			// @Valid Player player,
-			Owner owner,
-			// Errors errors,
-			Model model) {
-		// if(errors.hasErrors()) {
-		// return "admin/ownerSave";
-		// }
+	public String add(@Validated(OwnerSaveGroup.class) Owner owner, Errors errors, Model model, RedirectAttributes rd) {
+		if (errors.hasErrors()) {
+			List<ObjectError> objList = errors.getAllErrors();
+			for (ObjectError obj : objList) {
+				System.out.println(obj.toString());
+			}
+			model.addAttribute("title", "オーナー新規登録");
+
+			return "admin/ownerSave";
+		}
+
 		System.out.println(owner);
 		ownerMapper.add(owner);
+		rd.addFlashAttribute("statusMessage", "オーナーを新規登録しました。");
+
 		return "redirect:/admin/ownerList";
 
 	}
@@ -91,16 +107,20 @@ public class AdminController {
 	}
 
 	@PostMapping("/ownerEdit")
-	public String ownerEdit(
-			// @Valid
-			Owner owner,
-			// Errors errors,
-			Model model) {
-		// if (errors.hasErrors()) {
-		// return "admin/ownerSave";
-		// }
+	public String ownerEdit(@Validated(OwnerSaveGroup.class) Owner owner, Errors errors, Model model,
+			RedirectAttributes rd) {
+		if (errors.hasErrors()) {
+			List<ObjectError> objList = errors.getAllErrors();
+			for (ObjectError obj : objList) {
+				System.out.println(obj.toString());
+			}
+			model.addAttribute("title", "オーナー情報編集");
+			return "admin/ownerSave";
+		}
 		System.out.println(owner);
 		ownerMapper.edit(owner);
+		rd.addFlashAttribute("statusMessage", "オーナー情報を編集しました。");
+
 		return "redirect:/admin/ownerList";
 	}
 	//////////////////////// オーナー編集終わり////////////////////////////////////
@@ -120,7 +140,6 @@ public class AdminController {
 	public String apartAdd(Model model) {
 
 		model.addAttribute("apart", new Apart());
-		// model.addAttribute("image", new Image());
 		model.addAttribute("owners", ownerMapper.selectAll());
 		model.addAttribute("title", "アパート新規登録");
 
@@ -129,13 +148,22 @@ public class AdminController {
 	}
 
 	@PostMapping("/apartAdd")
-	public String apartAdd(Model model, Apart apart, @RequestParam MultipartFile upload)
-			throws IllegalStateException, IOException {
+	public String apartAdd(Model model, @Validated(ApartAddGroup.class) Apart apart, Errors errors,
+			@RequestParam MultipartFile upload, RedirectAttributes rd) throws IllegalStateException, IOException {
+		// if (upload.isEmpty()) {
+		// errors.rejectValue("imgName", "test");
+		// // model.addAttribute("msg", "ファイルを指定してください");
+		// // return "admin/apartSave";
+		// }
 		if (upload.isEmpty()) {
-			model.addAttribute("msg", "ファイルを指定してください");
+			errors.reject("noUpload");
+		}
+		if (errors.hasErrors()) {
 			model.addAttribute("owners", ownerMapper.selectAll());
+			model.addAttribute("title", "アパート新規登録");
 			return "admin/apartSave";
 		}
+
 		// ファイルサイズ
 		System.out.println(upload.getSize());
 		// ファイル種類
@@ -152,6 +180,7 @@ public class AdminController {
 		// imageMapper.add(image);//DBに保存
 
 		apartMapper.add(apart);
+		rd.addFlashAttribute("statusMessage", "アパートを新規登録しました。");
 
 		return "redirect:/admin/apartList";
 
@@ -170,12 +199,13 @@ public class AdminController {
 	}
 
 	@PostMapping("/apartEdit")
-	public String apartEdit(
-			// @Valid
-			Apart apart, Model model,
-			// Errors errors,
-			@RequestParam(name = "upload", required = false) MultipartFile upload)
-			throws IllegalStateException, IOException {
+	public String apartEdit(@Validated(ApartEditGroup.class) Apart apart, Errors errors, Model model,
+			@RequestParam MultipartFile upload, RedirectAttributes rd) throws IllegalStateException, IOException {
+		if (errors.hasErrors()) {
+			model.addAttribute("owners", ownerMapper.selectAll());
+			model.addAttribute("title", "アパート情報編集");
+			return "admin/apartSave";
+		}
 
 		if (!upload.isEmpty()) {
 			String imgName = upload.getOriginalFilename();
@@ -186,6 +216,7 @@ public class AdminController {
 		}
 
 		apartMapper.edit(apart);
+		rd.addFlashAttribute("statusMessage", "アパート情報を編集しました。");
 		return "redirect:/admin/apartList";
 	}
 
@@ -193,14 +224,13 @@ public class AdminController {
 
 	////////////////////// 部屋編集///////////////////////////////////////////////
 	@GetMapping("/roomList")
-	public String roomList(@RequestParam(name = "id", required = false) Integer id, Model model
-	) {
+	public String roomList(@RequestParam(name = "id", required = false) Integer id, Model model) {
 		if (id == null) {
 			return "redirect:/admin/apartList";
 		}
 
 		All all = allMapper.selectByApartId(id);
-		
+
 		model.addAttribute("all", all);
 		model.addAttribute("id", id);
 
@@ -225,23 +255,26 @@ public class AdminController {
 	}
 
 	@PostMapping("/roomAdd")
-	public String roomAdd(Model model, Room room, MultipartFile upload) throws IllegalStateException, IOException {
-		if (upload.isEmpty()) {
-			All all = allMapper.selectByApartId(room.getApartId());
-			model.addAttribute("all", all);
-			model.addAttribute("noPicture", "ファイルを指定してください");
-			return "admin/roomSave";
-		}
-
+	public String roomAdd(Model model, @Validated(RoomSaveGroup.class) Room room, Errors errors, MultipartFile upload,
+			RedirectAttributes rd) throws IllegalStateException, IOException {
 		All all = allMapper.selectByApartId(room.getApartId());
-		if (all != null) {
-			for (Room room1 : all.getRoomList()) {
-				if (room1.getNumber() == room.getNumber()) {
-					model.addAttribute("all", all);
-					model.addAttribute("noPicture", "部屋番号がすでに登録されています");
-					return "admin/roomSave";
-				}
+
+		// エラー処理
+		// 写真をアップロードしてないケース、エラーがあるケース、部屋番号が被ったケース
+		if (upload.isEmpty() || errors.hasErrors() || adminService.sameRoomNumber(room)) {
+			model.addAttribute("all", all);
+			model.addAttribute("title", "お部屋の新規登録");
+
+			// 入力した部屋番号がすでに存在するか確認
+			if (adminService.sameRoomNumber(room)) {
+				errors.rejectValue("number", "sameNumber");
 			}
+
+			// 写真をアップロードしてない場合
+			if (upload.isEmpty()) {
+				errors.reject("noUpload");
+			}
+			return "admin/roomSave";
 		}
 
 		apartMapper.roomAdd(room);
@@ -252,13 +285,16 @@ public class AdminController {
 			File dest = new File("C:/Users/zd3M01/uploads/" + name);
 			upload.transferTo(dest);
 
-			// ↓写真を登録する際、roomを登録した際にデータベースで作られたidが必要
-			Integer roomId = apartMapper.findRoomIdByNumberAndApartId(room.getNumber(), room.getApartId());
-			RoomImage roomImage = new RoomImage(null, name, room.getApartId(), roomId);
-			imageMapper.add(roomImage);
+			roomImageService.add(room, name);
+			// ↓いらなくなった
+			// Integer roomId = apartMapper.findRoomIdByNumberAndApartId(room.getNumber(),
+			// room.getApartId());
+			// RoomImage roomImage = new RoomImage(null, name, room.getApartId(), roomId);
+			// imageMapper.add(roomImage);
 		} catch (Exception e) {
 			apartMapper.roomDeleteByNumberAndApartId(room.getNumber(), room.getApartId());
 		}
+		rd.addFlashAttribute("statusMessage", "部屋を新規登録しました。");
 
 		return "redirect:/admin/roomList?id=" + room.getApartId();
 	}
@@ -269,39 +305,56 @@ public class AdminController {
 			return "redirect:/admin/roomList";
 		}
 
-		// Postからraで飛ばした
-		String noPicture = (String) model.getAttribute("noPicture");
-		if (noPicture != null) {
-			model.addAttribute("noPicture", noPicture);
-		}
-
 		Room room = apartMapper.selectRoomById(id);
-		System.out.println(room);
 		All all = allMapper.selectByApartId(room.getApartId());
 
-		model.addAttribute("roomImageListSize", room.getRoomImageList().size());
+		// ↓RoomのroomImageListをPostに飛ばすためsessionを使う
+		///////////////////////////////////////////////////////////////
+
+		session.setAttribute("exRoom", room);
+
+		///////////////////////////////////////////////////////////////
+
 		model.addAttribute("title", "お部屋の編集");
 		model.addAttribute("all", all);
 		model.addAttribute("room", room);
+		System.out.println(room);
+
 		return "admin/roomSave";
 	}
 
 	@PostMapping("/roomEdit")
-	public String roomEdit(RedirectAttributes ra,
-			@RequestParam(name = "roomImageListSize", required = false) Integer roomImageListSize,
-			@RequestParam(name = "deleteImgNameList", required = false) List<String> deleteImgNameList, Model model,
-			Room room, MultipartFile upload) throws IllegalStateException, IOException {
-		
+	public String roomEdit(@RequestParam(name = "deleteImgNameList", required = false) List<String> deleteImgNameList,
+			Model model, @Validated(RoomSaveGroup.class) Room room, Errors errors, MultipartFile upload,
+			RedirectAttributes rd) throws IllegalStateException, IOException {
+		All all = allMapper.selectByApartId(room.getApartId());
+		// ↓Getからsessionで飛ばしたroomImageListを入手、セット
+		Room exRoom = (Room) session.getAttribute("exRoom");
+		room.setRoomImageList(exRoom.getRoomImageList());
+
+		// エラー処理
+		// エラーがあるケース、部屋番号が被ったケース、写真を全部消したケース
+		if (errors.hasErrors() || adminService.sameRoomNumber(room)
+				|| adminService.noRoomImages(deleteImgNameList, upload, room.getRoomImageList().size())) {
+			model.addAttribute("title", "お部屋の編集");
+			model.addAttribute("all", all);
+
+			// 入力した部屋番号がすでに存在するか確認
+			if (adminService.sameRoomNumber(room)) {
+				errors.rejectValue("number", "sameNumber");
+			}
+			// 写真を全部消去かつ新規アップロードしていない場合
+			if (adminService.noRoomImages(deleteImgNameList, upload, room.getRoomImageList().size())) {
+				errors.reject("noPicture");
+			}
+			return "admin/roomSave";
+		}
+
 		apartMapper.roomEdit(room);
 
-		// 写真の削除を選んだ場合、削除
+		// 写真の削除を選んだ場合のコード
 		if (deleteImgNameList != null) {
-			//写真を全部消さないように
-			if (upload.isEmpty() && roomImageListSize == deleteImgNameList.size()) {
-				ra.addFlashAttribute("noPicture", "写真をすべて消す場合は新たにアップロードしてください");
-				return "redirect:/admin/roomEdit?id=" + room.getId();
-			}
-			//写真の削除
+			// 写真の削除
 			for (String deleteImgName : deleteImgNameList) {
 				// 写真を削除するコード。違う部屋で被ってる写真があるから、コメントアウト
 				// File dest = new File("C:/Users/zd3M01/uploads/" + deleteImgName);
@@ -310,14 +363,19 @@ public class AdminController {
 				imageMapper.delete(roomImage);
 			}
 		}
-		
+
 		if (!upload.isEmpty()) {
 			String name = upload.getOriginalFilename();
 			File dest = new File("C:/Users/zd3M01/uploads/" + name);
 			upload.transferTo(dest);
-			RoomImage roomImage = new RoomImage(null, name, room.getApartId(), room.getId());
-			imageMapper.add(roomImage);
+			// RoomImage roomImage = new RoomImage(null, name, room.getApartId(),
+			// room.getId());
+			// imageMapper.add(roomImage);
+
+			roomImageService.add(room, name);
 		}
+		rd.addFlashAttribute("statusMessage", "部屋情報を編集しました。");
+		session.removeAttribute("exRoom");
 
 		return "redirect:/admin/roomList?id=" + room.getApartId();
 	}

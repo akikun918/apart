@@ -5,9 +5,8 @@
 	<meta charset="UTF-8">
 	<title>ページタイトル</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<!--	<link href="css/style.css" rel="stylesheet">
--->
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
@@ -103,6 +102,52 @@
 
 
 	<script src="js/bootstrap.bundle.min.js"></script>
+	<script>
+		const maxChecks = 4;
+		const checkboxes = document.querySelectorAll('input[name="station"]');
+
+		checkboxes.forEach((checkbox) => {
+			checkbox.addEventListener('change', () => {
+				const checkedCheckboxes = document.querySelectorAll('input[name="station"]:checked');
+				if (checkedCheckboxes.length >= maxChecks) {
+					checkboxes.forEach((cb) => {
+						if (!cb.checked) {
+							cb.disabled = true;
+						}
+					});
+				} else {
+					checkboxes.forEach((cb) => {
+						cb.disabled = false;
+					});
+				}
+			});
+		});
+
+
+
+		const areaMaxChecks = 1;
+		const areaCheckboxes = document.querySelectorAll('input[name="address1"]');
+
+		areaCheckboxes.forEach((checkbox) => {
+			checkbox.addEventListener('change', () => {
+				const checkedCheckboxes = document.querySelectorAll('input[name="address1"]:checked');
+				if (checkedCheckboxes.length >= areaMaxChecks) {
+					areaCheckboxes.forEach((cb) => {
+						if (!cb.checked) {
+							cb.disabled = true;
+						}
+					});
+				} else {
+					areaCheckboxes.forEach((cb) => {
+						cb.disabled = false;
+					});
+				}
+			});
+		});
+	</script>
+
+
+
 </body>
 
 </html>

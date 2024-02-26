@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<title>a</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 	<link rel="stylesheet" href="../css/style.css">
 </head>
 
@@ -33,13 +33,13 @@
 						</div>
 					</div>
 				</nav>
-				
+
 				<h2>
 					問い合わせ完了
 				</h2>
 				<p>下記内容にて問い合わせいただきました</p>
 
-				<table th:object="${inquiry}"  class=" text-center ">
+				<table th:object="${inquiry}" class=" text-center ">
 					<tr>
 						<th>お名前</th>
 						<td>[[*{name}]]</td>
@@ -82,7 +82,7 @@
 	<!-- /.container  -->
 
 
-	<script src="../js/bootstrap.bundle.min.js"></script>
+	<script src="@{/js/bootstrap.bundle.min.js}"></script>
 
 </body>
 

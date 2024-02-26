@@ -5,9 +5,8 @@
 	<insert id="add">
 		INSERT INTO owners VALUES(NULL,
 		#{name}, #{birthday},
-		#{ownerBrokerageFee}, #{customerBrokerageFee})
+		#{ownerBrokerageFee}, #{customerBrokerageFee}, NOW() )
 	</insert>
-
 
 
 	<select id="selectAll" resultType="Owner">
@@ -33,8 +32,6 @@
 		customer_brokerage_fee = #{customerBrokerageFee}
 		WHERE id = #{id}
 	</update>
-
-
 
 
 </mapper>

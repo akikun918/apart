@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>ジードラ ホームズ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div class="container w-75 m-auto" >
+		<!-- 	<div class="w-50 m-auto"> -->
+
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top ">
+			<div class="container d-flex justify-content-end">
+<!--				<a class="navbar-brand" th:href="@{/}">お気に入り</a>
+-->				<!--<button class="navbar-toggler" data-bs-toggle="collapse"
+					data-bs-target="#menu">
+					<span class="navbar-toggler-icon"></span>
+				</button>-->
+				<div class="collapse navbar-collapse justify-content-end" id="menu" >
+					<ul class="navbar-nav">
+						<li class="nav-item"><a th:href="@{/}" class="nav-link">お気に入り</a>
+						</li>
+						<li class="nav-item"><a href="search.html" class="nav-link">会社</a>
+						</li>
+						<li class="nav-item"><a href="search.html" class="nav-link">会員登録</a>
+						</li>
+						<li class="nav-item"><a href="search.html" class="nav-link">ログイン</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<a th:href="@{/}">GD HOME'S</a>
+		<table class="table table-primary">
+			<thead>
+				<tr>
+					<th>借りる</th>
+					<th>買う</th>
+					<th>建てる</th>
+					<th>リフォーム</th>
+					<th>売る・貸す</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><a th:href="@{/rent}" class="btn btn-primary">賃貸</a></td>
+					<td><a th:href="@{/mainta}" class="btn btn-primary">中古一戸建て</a></td>
+					<td><a th:href="@{/mainta}" class="btn btn-primary">注文住宅</a></td>
+					<td><a th:href="@{/mainta}" class="btn btn-primary">リフォーム</a></td>
+					<td><a th:href="@{/mainta}" class="btn btn-primary">不動産査定・部屋を貸す</a></td>
+				</tr>
+
+			</tbody>
+		</table>
+		<div class="container-fluid header-outer">
+			<header class="text-light py-3">
+				<h1 class="display-1 display-1">
+					<a th:href="@{/}">ジードラ ホームズ</a>
+				</h1>
+				<p class="lead">SB HOME'Sは杉並・中野でのお住まいのサポートをする物件情報サイトです。</p>
+			</header>
+		</div>
+
+
+
+
+		<!--
+
+	<div>
+		<p>
+			SB HOME'Sでは地域に根付いた物件を多数ご紹介しております。杉並区・中野区の中央本線沿いの物件を掲載しております。<br />
+			また、一戸建て、土地などの販売・売却情報からリフォームまで行っております。
+		</p>
+	</div>
+	<dl class="Header__links">
+		<div>
+			<dt>借りる</dt>
+			<dd>
+				<a href="rent">賃貸</a>
+			</dd>
+		</div>
+
+		<div>
+			<dt>買う</dt>
+			<dd>
+				<a href="https://www.homes.co.jp/kodate/shinchiku/">新築<span
+						class="Header__visuallyHidden">一戸建て</span></a> <a
+					href="https://www.homes.co.jp/kodate/chuko/">中古<span class="Header__visuallyHidden">一戸建て</span></a>
+				           <a href="https://www.homes.co.jp/tochi/">土地</a>
+          <a href="https://www.homes.co.jp/iezukuri/">注文住宅</a>
+  
+			</dd>
+		</div>
+		<div>
+			<dt>建てる</dt>
+			<dd>
+				<a href="https://www.homes.co.jp/iezukuri/">注文住宅</a> <a href="https://www.homes.co.jp/tochi/">土地</a>
+			</dd>
+		</div>
+		<div>
+			<dt>リフォームする</dt>
+			<dd>
+				<a href="https://www.homes.co.jp/satei/">リフォーム</a>
+			</dd>
+		</div>
+		<div>
+			<dt>売る</dt>
+			<dd>
+				<a href="https://www.homes.co.jp/satei/">不動産査定</a>
+			</dd>
+		</div>
+		 			<div>
+				<dt>
+					<span class="Header__visuallyHidden">その他</span>
+				</dt>
+				<dd>
+					<a href="https://toushi.homes.co.jp/">投資</a> <a
+						href="https://www.homes.co.jp/hikkoshi/">引越し</a>
+				</dd>
+			</div> 
+	</dl>
+	<img src="images/topimage01.jpg" alt="">
+-->
+
+		<p><strong>
+			SB HOME'Sでは地域に根付いた物件を多数ご紹介しております。杉並区・中野区の中央本線沿いの物件を掲載しております。<br />
+			また、一戸建て、土地などの販売・売却情報からリフォームまで行っております。</strong>
+		</p>
+
+		<div class="container my-4">
+
+			<main>
+				<div class="row">
+					<div class="col-lg-8">
+						<h2>探す</h2>
+						<div class="row">
+
+							<div class="index col-md-6 col-lg-4 mb-4">
+								<h3>借りる</h3>
+								<p>マンション・アパート・一戸建て</p>
+								<a th:href="@{/rent}" class="btn btn-primary">賃貸</a>
+							</div>
+							<div class="index col-md-6 col-lg-4 mb-4">
+								<h3>買う</h3>
+								<p>一戸建て</p>
+								<a th:href="@{/mainta}" class="btn btn-primary">中古一戸建て</a>
+							</div>
+							<div class="index col-md-6 col-lg-4 mb-4">
+								<h3>建てる</h3>
+								<a th:href="@{/mainta}" class="btn btn-primary">注文住宅</a>
+							</div>
+							<div class="index col-md-6 col-lg-4 mb-4">
+								<h3>リフォーム</h3>
+								<a th:href="@{/mainta}" class="btn btn-primary">リフォーム</a>
+							</div>
+							<div class="index col-md-6 col-lg-4 mb-4">
+								<h3>売る・貸す</h3>
+								<a th:href="@{/mainta}" class="btn btn-primary">不動産査定・部屋を貸す</a>
+							</div>
+						</div>
+						<!-- /.row -->
+					</div>
+					<!-- /.col -->
+					<div class="col-lg-4">
+						<h2>アクセス</h2>
+						<p>西早稲田駅から徒歩5分</p>
+						<div id="map">
+							<iframe
+								src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12959.230606404
+ 391!2d139.7161935!3d35.7063507!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x
+ c209912588ad309e!2z5oi45bGx5YWs5ZyS!5e0!3m2!1sja!2sjp!4v1505175127919"
+								width="100%" height="300" frameborder="0" style="border: 0"
+								allowfullscreen></iframe>
+						</div>
+
+						<!--<div id="search">
+			<div id="search_area">
+				<h2>シェアハウスをエリアから探す</h2>
+
+				<ul id="search_area_list">
+					<li id="search_area_list_tokyo">
+						<h3>
+							<a href="a_area/n_tokyo/">東京</a>
+						</h3>
+					</li>
+					<li id="search_area_list_kanagawa">
+						<h3>
+							<a href="a_area/o_kanagawa/">神奈川<span> （横浜・川崎・武蔵小杉）</span></a>
+						</h3>
+					</li>
+					<li id="search_area_list_saitama">
+						<h3>
+							<a href="a_area/o_saitama/">埼玉<span> （大宮・川口・所沢）</span></a>
+						</h3>
+					</li>
+					<li id="search_area_list_hokkaidotohoku">
+						<h3>
+							<a href="a_area/o_hokkaidotohoku/">北海道・東北</a>
+						</h3>
+					</li>
+					<li id="search_area_list_chiba">
+						<h3>
+							<a href="a_area/o_chiba/">千葉<span> （千葉・松戸・船橋）</span></a>
+						</h3>
+					</li>
+					<li id="search_area_list_kansai">
+						<h3>
+							<a href="a_area/o_kansai/">関西<span> （大阪・京都・兵庫）</span></a>
+						</h3>
+					</li>
+					<li id="search_area_list_nagoya">
+						<h3>
+							<a href="a_area/p_nagoya/">名古屋</a>
+						</h3>
+					</li>
+					<li id="search_area_list_kyushu">
+						<h3>
+							<a href="a_area/o_kyushu/">中国・九州・沖縄</a>
+						</h3>
+					</li>
+				</ul>
+
+
+			</div>
+
+
+
+			<div id="search_right_container">
+
+
+				<div id="search_keywords">
+					<h2>フリーワードから探す</h2>
+					<form method="post" action="a_nsearch/">
+						<div id="search_keywords_textarea">
+							<input type="text" name="brs" value="" />
+						</div>
+						<div id="search_keywords_btn">
+							<input type="submit" value="検索" />
+						</div>
+					</form>
+				</div>
+
+				<div id="search_detail">
+					<h2>詳しく探す</h2>
+					<div id="search_detail_container">
+						<p>エリアや特徴などの項目を細かく選択して物件を検索することができます。</p>
+						<div>
+							<a href="a_nsearch/">詳しく探す</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+-->
+
+						<!-- <main>
+		<section>
+			<h2>ようこそウッディカフェへ！</h2>
+			<p>
+				「ウッディカフェ」は上野駅から徒歩 10 分の場所にありながら、<br> 上野公園の豊かな緑に囲まれた気持ちのよいカフェです。
+			</p>
+			<p>こもれびの中、ゆったりとした時間の流れを楽しみ、リラックスできる場所を提供いたし ます。</p>
+		</section>
+		<section>
+			<h2>私たちのこだわり</h2>
+			<p>私たちは、子どもも大切なお客様と考えております。お子様連れのお客様でも気軽に立ち
+				寄っていただけるようキッズスペースを設けています。</p>
+			<p>また、提供させていただくお料理、お飲み物は、有機素材にこだわっており、お子様でも 安心して食べていただけます。</p>
+		</section>
+	</main>
+	<aside>
+		<ul>
+			<li><a href=""><img src="images/banner01.jpg" width="300"
+					height="110" alt="メニュー"></a></li>
+			<li><a href=""><img src="images/banner02.jpg" width="300"
+					height="110" alt="ブログ"></a></li>
+			<li><a href=""><img src="images/banner03.jpg" width="300"
+					height="110" alt="アクセス"></a></li>
+		</ul>
+	</aside> -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.col -->
+		</div>
+		<!-- /.row -->
+		</main>
+	</div>
+	<div class="container-fluid bg-dark text-light text-center pt-4 pb-2">
+
+		<footer>
+
+
+			<ul id="footer_nav_top">
+				<li><a href="/">ホーム</a></li>
+				<li><a href="a_favorite/">お気に入り</a></li>
+				<li><a href="a_favorite/">マイページ</a></li>
+			</ul>
+
+			<ul id="footer_nav_bottom">
+				<li><a href="a_company/" rel="nofollow">会社概要</a></li>
+				<li><a href="a_site_rule/" rel="nofollow">利用規約</a></li>
+				<li><a href="a_privacy/" rel="nofollow">個人情報の取扱いについて</a></li>
+				<li><a href="a_escape_clause/" rel="nofollow">免責事項</a></li>
+				<li><a href="a_usage/">当サイトの使い方</a></li>
+				<li><a href="a_glossary/">シェアハウス・ゲストハウス用語集</a></li>
+				<li><a href="a_q_and_a/">Ｑ＆Ａ</a></li>
+				<li><a href="a_link/" rel="nofollow">相互リンク</a></li>
+				<li><a href="a_town_info/">タウン情報</a><br /></li>
+				<li><a href="a_job/">求人採用</a></li>
+				<li><a href="a_sitemap/">サイトマップ</a></li>
+				<li><a href="https://estate.guesthousebank.com/">物件掲載ご希望の方</a></li>
+				<li><a href="mailto:customer@guesthousebank.com">お問い合わせ</a></li>
+			</ul>
+		</footer>
+	</div>
+
+	<p id="copyrights">
+		<small>Copyrights&copy; 2007-2024 GuestHouseBank.com</small>
+	</p>
+	</div>
+	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+	</div>
+</body>
+
+</html>

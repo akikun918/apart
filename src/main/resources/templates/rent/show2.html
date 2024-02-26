@@ -283,7 +283,7 @@
 										該当するお部屋がありません<br>
 										条件を変更してください
 									</h3>
-									
+
 								</th:block>
 								<th:block th:each="filteredAll : ${filteredAlls}" th:object="${filteredAll}">
 
@@ -410,109 +410,123 @@
 
 
 								</th:block>
-							</div>
-							<!-- /.col -->
 
-							<div class="col-12  m-auto">
-								<div th:if="${session.keySet().contains('address1List')  }">
-									<div th:unless="${session.keySet().contains('all') }">
 
+								<div class="col-12  m-auto">
+									<div th:if="${session.keySet().contains('address1List')  }">
+										<div th:unless="${session.keySet().contains('all') }">
+
+											<div th:if="${totalPage >= 2}">
+												<ul class="pagination">
+													<!-- 前のページリンク -->
+													<th:block th:switch="${page}">
+														<li class="page-item" th:case="1"><a href=""
+																class="noevent page-link">前ページ</a></li>
+
+														<li class="page-item" th:case="*"><a class="page-link"
+																th:href="@{/rent/areaShow(page=${page-1})}">前ページ</a>
+														</li>
+
+													</th:block>
+
+													<!-- ページ番号 -->
+													<th:block th:each="index : ${#numbers.sequence(1, totalPage)}">
+														<th:block th:switch="${index}">
+															<li class="page-item" th:case="${page}"><a href=""
+																	class="noevent page-link">[[${index}]]</a></li>
+															<li class="page-item" th:case="*"><a class="page-link"
+																	th:href="@{/rent/areaShow(page=${index})}">[[${index}]]</a>
+															</li>
+														</th:block>
+													</th:block>
+
+													<!-- 次のページリンク -->
+													<th:block th:switch="${page}">
+														<li th:case="${totalPage}"><a href=""
+																class="noevent page-link">次ページ</a></li>
+														<li th:case="*"><a class=" page-link"
+																th:href="@{/rent/areaShow(page=${page+1})}">次ページ</a>
+														</li>
+													</th:block>
+												</ul>
+											</div>
+										</div>
+									</div>
+
+									<div th:if="${session.keySet().contains('stationList') }">
+										<div th:unless="${session.keySet().contains('all') }">
+											<div th:if="${totalPage >= 2}">
+												<ul class="pagination">
+													<!-- 前のページリンク -->
+													<th:block th:switch="${page}">
+														<li class="page-item" th:case="1"><a href=""
+																class="noevent page-link">前ページ</a></li>
+
+														<li class="page-item" th:case="*"><a class="page-link"
+																th:href="@{/rent/stationShow(page=${page-1})}">前ページ</a>
+														</li>
+
+													</th:block>
+
+													<!-- ページ番号 -->
+													<th:block th:each="index : ${#numbers.sequence(1, totalPage)}">
+														<th:block th:switch="${index}">
+															<li class="page-item" th:case="${page}"><a href=""
+																	class="noevent page-link">[[${index}]]</a></li>
+															<li class="page-item" th:case="*"><a class="page-link"
+																	th:href="@{/rent/stationShow(page=${index})}">[[${index}]]</a>
+															</li>
+
+
+														</th:block>
+													</th:block>
+
+													<!-- 次のページリンク -->
+													<th:block th:switch="${page}">
+														<li class="page-item"  th:case="${totalPage}"><a href="" class="noevent page-link">次ページ</a>
+														</li>
+														<li class="page-item"  th:case="*"><a class="page-link"
+																th:href="@{/rent/stationShow(page=${page+1})}">次ページ</a>
+														</li>
+													</th:block>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div th:if="${session.keySet().contains('all')  }">
 										<div th:if="${totalPage >= 2}">
-											<ul>
+											<ul class="pagination">
 												<!-- 前のページリンク -->
 												<th:block th:switch="${page}">
-													<li th:case="1"><a href="" class="noevent">前ページ</a></li>
-
-													<li th:case="*"><a
-															th:href="@{/rent/areaShow(page=${page-1})}">前ページ</a></li>
-
+													<li  th:case="1"><a href="" class="noevent page-link">前ページ</a></li >
+													<li  class="page-item" th:case="*"><a class="page-link"
+															th:href="@{/rent/filteredShow(page=${page-1})}">前ページ</a>
+													</li>
 												</th:block>
 
 												<!-- ページ番号 -->
 												<th:block th:each="index : ${#numbers.sequence(1, totalPage)}">
 													<th:block th:switch="${index}">
-														<li th:case="${page}"><a href=""
-																class="noevent">[[${index}]]</a></li>
-														<li th:case="*"><a
-																th:href="@{/rent/areaShow(page=${index})}">[[${index}]]</a>
+														<li  class="page-item" th:case="${page}"><a href=""
+																class="noevent page-link">[[${index}]]</a>
+														</li>
+														<li  class="page-item" th:case="*"><a class="page-link"
+																th:href="@{/rent/filteredShow(page=${index})}">[[${index}]]</a>
 														</li>
 													</th:block>
 												</th:block>
-
 												<!-- 次のページリンク -->
 												<th:block th:switch="${page}">
-													<li th:case="${totalPage}"><a href="" class="noevent">次ページ</a></li>
-													<li th:case="*"><a
-															th:href="@{/rent/areaShow(page=${page+1})}">次ページ</a></li>
+													<li  class="page-item" th:case="${totalPage}"><a href="" class="noevent page-link">次ページ</a></li>
+													<li  class="page-item" th:case="*"><a class="page-link"
+															th:href="@{/rent/filteredShow(page=${page+1})}">次ページ</a>
+													</li>
 												</th:block>
 											</ul>
 										</div>
 									</div>
 								</div>
-
-								<div th:if="${session.keySet().contains('stationList') }">
-									<div th:unless="${session.keySet().contains('all') }">
-										<div th:if="${totalPage >= 2}">
-											<ul>
-												<!-- 前のページリンク -->
-												<th:block th:switch="${page}">
-													<li th:case="1"><a href="" class="noevent">前ページ</a></li>
-
-													<li th:case="*"><a
-															th:href="@{/rent/stationShow(page=${page-1})}">前ページ</a></li>
-
-												</th:block>
-
-												<!-- ページ番号 -->
-												<th:block th:each="index : ${#numbers.sequence(1, totalPage)}">
-													<th:block th:switch="${index}">
-														<li th:case="${page}"><a href=""
-																class="noevent">[[${index}]]</a></li>
-														<li th:case="*"><a
-																th:href="@{/rent/stationShow(page=${index})}">[[${index}]]</a>
-														</li>
-													</th:block>
-												</th:block>
-
-												<!-- 次のページリンク -->
-												<th:block th:switch="${page}">
-													<li th:case="${totalPage}"><a href="" class="noevent">次ページ</a></li>
-													<li th:case="*"><a
-															th:href="@{/rent/stationShow(page=${page+1})}">次ページ</a></li>
-												</th:block>
-											</ul>
-										</div>
-									</div>
-								</div>
-								<div th:if="${session.keySet().contains('all')  }">
-									<div th:if="${totalPage >= 2}">
-										<ul>
-											<!-- 前のページリンク -->
-											<th:block th:switch="${page}">
-												<li th:case="1"><a href="" class="noevent">前ページ</a></li>
-												<li th:case="*"><a
-														th:href="@{/rent/filteredShow(page=${page-1})}">前ページ</a></li>
-											</th:block>
-
-											<!-- ページ番号 -->
-											<th:block th:each="index : ${#numbers.sequence(1, totalPage)}">
-												<th:block th:switch="${index}">
-													<li th:case="${page}"><a href="" class="noevent">[[${index}]]</a>
-													</li>
-													<li th:case="*"><a
-															th:href="@{/rent/filteredShow(page=${index})}">[[${index}]]</a>
-													</li>
-												</th:block>
-											</th:block>
-											<!-- 次のページリンク -->
-											<th:block th:switch="${page}">
-												<li th:case="${totalPage}"><a href="" class="noevent">次ページ</a></li>
-												<li th:case="*"><a
-														th:href="@{/rent/filteredShow(page=${page+1})}">次ページ</a></li>
-											</th:block>
-										</ul>
-									</div>
-								</div>
+								<!-- /.col -->
 							</div>
 							<!-- /.col -->
 						</div>
@@ -529,7 +543,7 @@
 		</div>
 		<!-- /.row -->
 	</div>
-	<script src="../js/bootstrap.bundle.min.js"></script>
+	<script src="@{/js/bootstrap.bundle.min.js}"></script>
 
 </body>
 

@@ -2,6 +2,7 @@ package com.example.app.domain;
 
 import java.util.List;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,8 @@ public class Auth {
 	@NotBlank
 	private String loginId;
 	private String loginPass;
+	@AssertTrue
+	private Boolean agreement;
 	private Integer fRoomId1;
 	private Integer fRoomId2;
 	private Integer fRoomId3;

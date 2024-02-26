@@ -43,16 +43,15 @@
 	</div>
 	<div class="text-center mt-4">
 		<h1>[[${title}]]</h1>
-		<br> <font color="#ff4500"> <th:block th:if="${fav}">
-		[[${fav}]]
+		<br>
+		<th:block th:if="${fav}">
+			<font color="#ff4500"> [[${fav}]] </font>
 		</th:block>
-		</font>
 
 		<th:block th:unless="${session.loginId}">
 			<form class="mt-4" th:action="@{/auth/login}" method="post"
 				th:object="${auth}">
-				<!--				<span th:errors="*{loginId}" class="error"></span>
--->
+				<span th:errors="*{loginId}" class="error"></span>
 				<p class="mt-2">
 					ログインID： <input type="text" th:field="*{loginId}">
 				</p>

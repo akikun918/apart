@@ -1,5 +1,7 @@
 package com.example.app.domain;
 
+import com.example.app.validation.InquiryGroup;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -15,29 +17,22 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class Inquiry {
-	
-	@Size(min=2, max=15   )
+
+	@Size(min = 2, max = 15, groups = { InquiryGroup.class })
 	private String name;
-	@Email
-	@NotBlank
+	@Email(groups = { InquiryGroup.class })
+	@NotBlank(groups = { InquiryGroup.class })
+	@Email(groups = { InquiryGroup.class })
 	private String mail;
-	@NotNull
-	@Min(99999)
-//	@Max(999999999)
+	@NotNull(groups = { InquiryGroup.class })
+	@Min(value = 99999, groups = { InquiryGroup.class })
+	//	@Max(999999999)
 	private Integer tel;
-	@NotBlank
+	@NotBlank(groups = { InquiryGroup.class })
 	private String movetime;
-	@NotBlank
+	@NotBlank(groups = { InquiryGroup.class })
 	private String about;
-	@NotBlank
+	@NotBlank(groups = { InquiryGroup.class })
 	private String detail;
 
-	
-	
-	
-	
-	
-	
-	
-	
 }

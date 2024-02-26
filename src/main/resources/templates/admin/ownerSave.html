@@ -1,48 +1,47 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<meta charset="UTF-8">
-<title>[[${title}]]</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<title>[[${title}]]</title>
 </head>
 
 <body>
-	<!-- <th:block th:object="${player}">
-		<p th:errors="*{name}"></p>
-		<p th:errors="*{position}"></p>
-		<p th:errors="*{birthday}"></p>
-	</th:block> -->
-	<p><a th:href="@{/admin/menu}">メニューへ</a></p>
-		<p><a th:href="@{/admin/ownerList}">オーナー一覧へ</a></p>
-	
-	
-	<h1>[[${title}]]</h1>
-
-	<!--	<th:block th:if="${owner.name == null}">-->
-	<!--		<form th:action="@{/admin/ownerAdd}" method="post" th:object="${owner}">
 -->
-	<!-- 	<form action="" method="post" th:object="${owner}">
- -->
-	<th:block th:if="${owner.name == null}">
+<!--	<p>
+		<a th:href="@{/admin/menu}">メニューへ</a>
+	</p>
+	<p>
+		<a th:href="@{/admin/ownerList}">オーナー一覧へ</a>
+	</p>
+
+
+	<h1>[[${title}]]</h1>
+	<th:block th:if="${owner.id == null}">
 		<form th:action="@{/admin/ownerAdd}" method="post">
 	</th:block>
-	<th:block th:if="${owner.name != null}">
+	<th:block th:if="${owner.id != null}">
 		<form th:action="@{/admin/ownerEdit}" method="post">
 	</th:block>
 	<th:block th:object="${owner}">
 
-		<input type="hidden"  th:field="*{id}" >
+		<input type="hidden" th:field="*{id}">
+		<p class="error" th:errors="*{name}"></p>
 		<p>
 			名前： <input type="text" th:field="*{name}" />
 		</p>
+		<p class="error" th:errors="*{birthday}"></p>
 		<p>
 			生年月日： <input type="date" th:field="*{birthday}" />
 		</p>
+		<p class="error" th:errors="*{ownerBrokerageFee}"></p>
 		<p>
-			オーナー様への仲介手数料： <input type="text" th:field="*{ownerBrokerageFee}" />
+			オーナー様への仲介手数料： <input type="number" th:field="*{ownerBrokerageFee}" step="0.1" />
 		</p>
+		<p class="error" th:errors="*{customerBrokerageFee}"></p>
 		<p>
-			お客様からの仲介手数料： <input type="text" th:field="*{customerBrokerageFee}" />
+			お客様からの仲介手数料： <input type="number" th:field="*{customerBrokerageFee}" step="0.1" />
 		</p>
 
 		<p>
@@ -52,6 +51,62 @@
 	</th:block>
 
 	</form>
+
+-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>[[${title}]]</title>
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div class="container">
+
+		<p class="mt-4">
+			<a th:href="@{/adminHome}">メニューへ</a>　
+			<a th:href="@{/admin/ownerList}">オーナー一覧へ</a>
+		</p>
+		
+
+		<h1 class="my-4">[[${title}]]</h1>
+
+		<th:block th:if="${owner.id == null}">
+			<form th:action="@{/admin/ownerAdd}" method="post" th:object="${owner}">
+		</th:block>
+		<th:block th:if="${owner.id != null}">
+			<form th:action="@{/admin/ownerEdit}" method="post" th:object="${owner}">
+		</th:block>
+
+		<th:block th:object="${owner}">
+
+			<input type="hidden" th:field="*{id}">
+
+			<span th:errors="*{name}" class="error"></span>
+			<p class="mt-2">氏名：<input type="text" th:field="*{name}"></p>
+
+			<span th:errors="*{birthday}" class="error"></span>
+			<p class="mt-2">生年月日：<input type="date" th:field="*{birthday}"></p>
+
+			<span th:errors="*{ownerBrokerageFee}" class="error"></span>
+			<p class="mt-2">オーナーへの仲介手数料：<input type="number" th:field="*{ownerBrokerageFee}" step="0.1" ></p>
+
+			<span th:errors="*{customerBrokerageFee}" class="error"></span>
+			<p class="mt-2">客先請求仲介手数料：<input type="number" th:field="*{customerBrokerageFee}" step="0.1" ></p>
+
+
+			<input class="btn btn-primary" type="submit" value="登録">
+		</th:block>
+		</form>
+
+	</div>
+</body>
+
+</html>
 
 
 

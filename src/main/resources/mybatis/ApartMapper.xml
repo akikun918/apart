@@ -46,7 +46,7 @@
 	</update>
 
 
-	<insert id="roomAdd">
+	<insert id="roomAdd"  useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO rooms VALUES(NULL,
 		#{apartId}, #{number},
 		#{active}, #{price}, #{deposit}, #{keyMoney}, #{size},
@@ -116,11 +116,11 @@
 	</update>
 
 
-	<select id="findRoomIdByNumberAndApartId" resultType="Integer">
+<!-- 	<select id="findRoomIdByNumberAndApartId" resultType="Integer">
 		SELECT
 		rooms.id FROM rooms WHERE rooms.apart_id = #{apartId} AND rooms.number
 		= #{number}
-	</select>
+	</select> -->
 
 
 	<delete id="roomDeleteByNumberAndApartId">

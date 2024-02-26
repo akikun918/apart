@@ -2,11 +2,11 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<meta charset="UTF-8">
-<title>a</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="../css/style.css">
+	<meta charset="UTF-8">
+	<title>a</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
@@ -18,21 +18,17 @@
 						<h1>
 							<a class="navbar-brand" th:href="@{/}">B HOME'S</a>
 						</h1>
-						<button class="navbar-toggler" data-bs-toggle="collapse"
-							data-bs-target="#menu">
+						<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
 							<span class="navbar-toggler-icon"></span>
 						</button>
 						<div class="collapse navbar-collapse" id="menu">
 							<ul class="navbar-nav">
-								<li class="nav-item"><a th:href="@{/}"
-									class="nav-link active">Home</a></li>
-								<li class="nav-item"><a th:href="@{/rent/favoriteShow}"
-									class="nav-link">お気に入り</a></li>
-								<li class="nav-item"><a class="nav-link">会社概要</a> <!-- <a th:href="@{/mainta}" class="nav-link">会社概要</a> --></li>
-								<li class="nav-item"><a th:href="@{/auth/register}"
-									class="nav-link">会員登録</a></li>
-								<li class="nav-item"><a th:href="@{/auth/login}"
-									class="nav-link">ログイン</a></li>
+								<li class="nav-item"><a th:href="@{/}" class="nav-link active">Home</a></li>
+								<li class="nav-item"><a th:href="@{/rent/favoriteShow}" class="nav-link">お気に入り</a></li>
+								<li class="nav-item"><a class="nav-link">会社概要</a>
+									<!-- <a th:href="@{/mainta}" class="nav-link">会社概要</a> --></li>
+								<li class="nav-item"><a th:href="@{/auth/register}" class="nav-link">会員登録</a></li>
+								<li class="nav-item"><a th:href="@{/auth/login}" class="nav-link">ログイン</a></li>
 							</ul>
 						</div>
 					</div>
@@ -45,20 +41,24 @@
 
 
 							<div id="stage">
-								<img th:src="@{/uploads/{name}(name=*{apart.imgName})}"
-									width="500">
+								<img th:src="@{/uploads/{name}(name=*{apart.imgName})}" width="500">
 							</div>
 						</div>
 						<div class="col-5 ">
 							<div id="thumb">
-								<img th:src="@{/uploads/{name}(name=*{apart.imgName})}" alt=""
-									width="110"> <img src="../images/fukui2.jpg" alt="越前の街並み"
-									width="110"> <img src="../images/fukui1.jpg" alt="駅前の恐竜"
-									width="110"> <img src="../images/fukui2.jpg" alt="越前の街並み"
-									width="110"> <img src="../images/fukui3.jpg" alt="恐竜博物館"
-									width="110"> <img src="../images/fukui2.jpg" alt="越前の街並み"
-									width="110"> <img src="../images/fukui3.jpg" alt="恐竜博物館"
-									width="110">
+								<img th:src="@{/uploads/{name}(name=*{apart.imgName})}" alt="" width="110">
+								<img src="../images/fukui2.jpg" alt="越前の街並み" width="110">
+								<img src="../images/fukui1.jpg" alt="駅前の恐竜" width="110">
+								<img src="../images/fukui2.jpg" alt="越前の街並み" width="110">
+								<img src="../images/fukui3.jpg" alt="恐竜博物館" width="110">
+								<img src="../images/fukui2.jpg" alt="越前の街並み" width="110">
+								<img src="../images/fukui3.jpg" alt="恐竜博物館" width="110">
+
+								<th:block th:each="roomImage : *{getRoomList().get(0).roomImageList}"
+									th:object="${roomImage}">
+									<img th:src="@{/uploads/{name}(name=*{name})}" alt="" width="110">
+								</th:block>
+
 							</div>
 						</div>
 
@@ -85,7 +85,7 @@
 										<td>[[*{apart.material}]]</td>
 
 										<td th:if="*{getRoomList().get(0).sepToilet == 1}">セパレート</td>
-										<td th:if="*{getRoomList().get(0).sepToilet == 0}">ユニットバ</td>
+										<td th:if="*{getRoomList().get(0).sepToilet == 0}">ユニットバス</td>
 
 
 
@@ -104,9 +104,11 @@
 									<tr>
 										<td>
 											<div style="font-weight: bold">[[*{apart.station1}]] 駅
-												徒歩[[*{apart.far1}]]分</div> <!-- 	<div th:if="*{apart.station2 != null}"> -->
+												徒歩[[*{apart.far1}]]分</div>
+											<!-- 	<div th:if="*{apart.station2 != null}"> -->
 											<div th:if="*{!apart.station2.isEmpty }">
-												[[*{apart.station2}]] 駅 徒歩[[*{apart.far2}]]分</div> <!-- <div th:if="*{apart.station3 != null}"> -->
+												[[*{apart.station2}]] 駅 徒歩[[*{apart.far2}]]分</div>
+											<!-- <div th:if="*{apart.station3 != null}"> -->
 											<div th:if="*{not #strings.isEmpty(apart.station3)}">
 												[[*{apart.station3}]] 駅 徒歩[[*{apart.far3}]]分</div>
 										</td>
@@ -127,20 +129,23 @@
 											<!-- <th:block th:unless="${favoriteAdded}">
 													<a
 														th:href="@{/rent/detail(id=*{getRoomList().get(0).id},fav=1 )}">お気入り追加</a>
-												</th:block> --> <th:block th:if="${favoriteAdded}">
+												</th:block> -->
+											<th:block th:if="${favoriteAdded}">
 												<div>お気入り追加済み</div>
-											</th:block> <th:block th:unless="${favoriteAdded}">
+											</th:block>
+											<th:block th:unless="${favoriteAdded}">
 
 												<form th:action="@{/rent/detail}">
 													<input type="hidden" name="id"
-														th:value="*{getRoomList().get(0).id}"> <input
-														type="hidden" name="fav" th:value="1"> <input
-														type="submit" value="お気に入り登録" id="btn" />
+														th:value="*{getRoomList().get(0).id}"> <input type="hidden"
+														name="fav" th:value="1"> <input type="submit" value="お気に入り登録"
+														id="btn" />
 												</form>
 
 											</th:block>
 											<div>
-												<a th:href="@{/rent/inquiry(id=*{getRoomList().get(0).id})}"  target="_blank">お問い合わせ</a>
+												<a th:href="@{/rent/inquiry(id=*{getRoomList().get(0).id})}"
+													target="_blank">お問い合わせ</a>
 											</div>
 										</td>
 
@@ -181,18 +186,20 @@
 		<!-- /.row -->
 	</div>
 	<!-- /.container  -->
-	<script src="../js/bootstrap.bundle.min.js"></script>
+	<script src="@{/js/bootstrap.bundle.min.js}"></script>
+	<!--	下のscriptを使うのに必要
+-->
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script>
-		$(document).ready(function() {
+		$(document).ready(function () {
 			const origin = $('#stage img').attr('src');
-			$('#thumb img').click(function() {
+			$('#thumb img').click(function () {
 				const image = $(this).attr('src');
 				$('#stage img').attr('src', image);
 			});
 
 			var btn = document.getElementById('btn');
-			btn.addEventListener('click', function() {
+			btn.addEventListener('click', function () {
 				alert("お気に入りは10件まで登録できます。10件を超えると古い順から削除されます。");
 				//submit()でフォームの内容を送信
 				document.myform.submit();
